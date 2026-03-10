@@ -1,0 +1,62 @@
+[
+  {
+    "exchange": "belo",
+    "moneda": "ARS",
+    "monedaBase": "BTC",
+    "compra": 103315096.6692,
+    "venta": 99902582.109
+  },
+  {
+    "exchange": "belo",
+    "moneda": "BRLa",
+    "monedaBase": "BTC",
+    "compra": 368086.174368,
+    "venta": 355672.3254975
+  },
+  {
+    "exchange": "belo",
+    "moneda": "ARGt",
+    "monedaBase": "BTC",
+    "compra": 103315096.6692,
+    "venta": 99902582.109
+  },
+  {
+    "exchange": "belo",
+    "moneda": "ETH",
+    "monedaBase": "BTC",
+    "compra": 34.38056535401668,
+    "venta": 33.68829567543349
+  },
+  {
+    "exchange": "belo",
+    "moneda": "USD",
+    "monedaBase": "BTC",
+    "criptomoneda": "USDT",
+    "criptomonedaBase": null,
+    "compra": 69713.2906,
+    "venta": 68332.8195
+  },
+  {
+    "exchange": "belo",
+    "moneda": "USD",
+    "monedaBase": "BTC",
+    "criptomoneda": "USDC",
+    "criptomonedaBase": null,
+    "compra": 69730.2384,
+    "venta": 68349.4317
+  },
+  {
+    "exchange": "belo",
+    "moneda": "SOL",
+    "monedaBase": "BTC",
+    "compra": 811.1306593600017,
+    "venta": 795.0048256792919
+  },
+  {
+    "exchange": "belo",
+    "moneda": "BRLa",
+    "monedaBase": "BTC",
+    "compra": 368086.174368,
+    "venta": 355672.3254975
+  }
+]

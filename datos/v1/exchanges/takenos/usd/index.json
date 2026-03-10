@@ -1,0 +1,11 @@
+[
+  {
+    "exchange": "takenos",
+    "moneda": "BRL",
+    "monedaBase": "USD",
+    "criptomoneda": "USDT",
+    "criptomonedaBase": null,
+    "compra": 5.1417152999999995,
+    "venta": 5.496218
+  }
+]

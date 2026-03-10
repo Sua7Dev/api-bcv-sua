@@ -1,0 +1,154 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "DolarApi.com",
+    "version": "1.1.0",
+    "description": "<div class=\"flex flex-col\">\n\n  API desarrollada en <a href=\"https://es.js.org?ref=dolarapi.com\" target=\"_blank\">EsJS</a> que brinda información actualizada sobre las cotizaciones del Dólar en Mexico.\n\n  ¿Encontraste útil esta API? <strong>¡Dejá tu ⭐ en <a href=\"https://github.com/enzonotario/esjs-dolar-api\" alt=\"GitHub\" target=\"_blank\">GitHub</a>!</strong>\n\n## Demo\n[App.DolarApi.com](https://app.dolarapi.com)"
+  },
+  "servers": [
+    {
+      "url": "https://mx.dolarapi.com",
+      "description": "Producción"
+    },
+    {
+      "url": "http://localhost:5173",
+      "description": "Local"
+    }
+  ],
+  "paths": {
+    "/v1/cotizaciones": {
+      "get": {
+        "summary": "Cotizaciones",
+        "tags": [
+          "Hidden - Cotización actual"
+        ],
+        "description": "Cotizaciones de las monedas más utilizadas en Mexico",
+        "responses": {
+          "200": {
+            "description": "Devuelve las cotizaciones de las monedas más utilizadas en Mexico",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Cotizacion"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-cotizaciones"
+      }
+    },
+    "/v1/cotizaciones/usd": {
+      "get": {
+        "summary": "Dólar",
+        "tags": [
+          "Cotización actual"
+        ],
+        "description": "Cotización del dólar estadounidense en pesos mexicanos",
+        "responses": {
+          "200": {
+            "description": "Devuelve la cotización del Dólar Estadounidense",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cotizacion"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "operationId": "get-usd-mxn"
+      }
+    },
+    "/v1/estado": {
+      "get": {
+        "summary": "Estado de la API",
+        "tags": [
+          "API"
+        ],
+        "responses": {
+          "200": {
+            "description": "Devuelve el estado de la API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Estado"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-estado"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Cotizacion": {
+        "title": "Cotizacion",
+        "type": "object",
+        "x-stoplight": {
+          "id": "ce96aa7960850"
+        },
+        "x-examples": {
+          "Example 1": {
+            "fechaActualizacion": "2021-01-01T00:00:00.000Z",
+            "compra": 123.99,
+            "venta": 132.99
+          }
+        },
+        "properties": {
+          "fix": {
+            "type": "number"
+          },
+          "compra": {
+            "type": "number"
+          },
+          "venta": {
+            "type": "number"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "moneda": {
+            "type": "string"
+          },
+          "fechaActualizacion": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "venta",
+          "nombre",
+          "moneda",
+          "fechaActualizacion"
+        ]
+      },
+      "Estado": {
+        "title": "Estado",
+        "x-stoplight": {
+          "id": "ogwpb2wxiqwqh"
+        },
+        "type": "object",
+        "properties": {
+          "estado": {
+            "type": "string"
+          },
+          "aleatorio": {
+            "type": "integer"
+          }
+        },
+        "x-examples": {
+          "Example 1": {
+            "estado": "Disponible",
+            "aleatorio": 1234
+          }
+        }
+      }
+    }
+  }
+}

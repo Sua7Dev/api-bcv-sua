@@ -1,0 +1,18 @@
+[
+  {
+    "exchange": "belo",
+    "moneda": "USD",
+    "monedaBase": "BRL",
+    "criptomoneda": "USDT",
+    "criptomonedaBase": null,
+    "compra": 0.19731027857829012,
+    "venta": 0.1893939393939394
+  },
+  {
+    "exchange": "belo",
+    "moneda": "ARS",
+    "monedaBase": "BRL",
+    "compra": 292.41383285302595,
+    "venta": 276.8939393939394
+  }
+]

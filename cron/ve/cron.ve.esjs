@@ -1,0 +1,219 @@
+importar extraerDolarYadio, { extraerEurYadio } desde '@/ve/yadio.extractor.esjs'
+importar extraerDolarBcv, { extraerEurBcv } desde '@/ve/bcv.extractor.esjs'
+importar { escribirRutaRegion } desde '@/utils/rutas.esjs'
+importar { guardarCotizacionesVe } desde '@/ve/db.ve.esjs'
+importar { abrirBD, cerrarBD } desde '@/utils/sqlite.esjs'
+importar { grupo, logError } desde '@/log.esjs'
+importar tryToCatch desde 'try-to-catch'
+
+exportar porDefecto asincrono funcion () {
+  const log = grupo({ cron: 'cron.ve.esjs' })
+
+  log.info('Inicio')
+
+  const [error] = esperar tryToCatch(guardarDolares, log)
+
+  si (error) {
+    logError(log, error)
+  }
+
+  log.info('Fin')
+}
+
+asincrono funcion guardarDolares(log) {
+  const [errorYadio, dolaresYadio] = esperar tryToCatch(extraerDolarYadio)
+
+  si (errorYadio) {
+    logError(log, errorYadio, { extractor: 'yadio.extractor.esjs' })
+  }
+
+  const [errorBcv, dolarBcv] = esperar tryToCatch(extraerDolarBcv)
+
+  si (errorBcv) {
+    logError(log, errorBcv, { extractor: 'bcv.extractor.esjs' })
+  }
+
+  const { oficial: euroBcv, paralelo: euroYadio } = esperar extraerEuros(log)
+
+  const dolares = []
+
+  si (dolarBcv) {
+    dolares.agregar(dolarBcv)
+  }
+
+  si (dolaresYadio && dolaresYadio.longitud > 0) {
+    dolares.agregar(...dolaresYadio)
+  }
+
+  si (dolares.longitud === 0) {
+    retornar
+  }
+
+  const orden = ['oficial', 'paralelo']
+
+  dolares.ordenar((a, b) => {
+      const indexA = orden.indiceDe(a.fuente)
+      const indexB = orden.indiceDe(b.fuente)
+      retornar indexA - indexB
+    }).mapear((dolar) => {
+      escribirRutaRegion('ve', `/dolares/${dolar.fuente}`, dolar)
+    })
+
+  escribirRutaRegion('ve', '/dolares', dolares)
+
+  const cotizaciones = []
+
+  si (dolarBcv) {
+    cotizaciones.agregar({
+      fuente: dolarBcv.fuente,
+      nombre: 'Dólar',
+      moneda: 'USD',
+      compra: dolarBcv.compra,
+      venta: dolarBcv.venta,
+      promedio: dolarBcv.promedio,
+      fechaActualizacion: dolarBcv.fechaActualizacion,
+    })
+  }
+
+  si (euroBcv) {
+    cotizaciones.agregar({
+      fuente: euroBcv.fuente,
+      nombre: euroBcv.nombre,
+      moneda: euroBcv.moneda,
+      compra: euroBcv.compra,
+      venta: euroBcv.venta,
+      promedio: euroBcv.promedio,
+      fechaActualizacion: euroBcv.fechaActualizacion,
+    })
+  }
+
+  escribirRutaRegion('ve', '/cotizaciones', cotizaciones)
+
+  const [errorDb] = esperar tryToCatch(guardarCotizacionesVe, cotizaciones)
+  si (errorDb) {
+    logError(log, errorDb, { accion: 'guardarCotizacionesVe' })
+  }
+
+  const euros = []
+
+  si (euroBcv) {
+    euros.agregar(euroBcv)
+  }
+
+  si (euroYadio) {
+    euros.agregar({
+      ...euroYadio,
+      fuente: 'paralelo',
+      nombre: 'Paralelo',
+    })
+  }
+
+  euros.paraCada((euro) => {
+    escribirRutaRegion('ve', `/euros/${euro.fuente}`, euro)
+  })
+
+  escribirRutaRegion('ve', '/euros', euros)
+
+  const [errorHistoricos] = esperar tryToCatch(generarHistoricos, log)
+  si (errorHistoricos) {
+    logError(log, errorHistoricos, { accion: 'generarHistoricos' })
+  }
+}
+
+asincrono funcion generarHistoricos(log) {
+  const db = abrirBD('./datos/ve/ve.sqlite')
+
+  const rutas = [
+    { moneda: 'USD', fuente: 'oficial', ruta: '/historicos/dolares/oficial' },
+    { moneda: 'USD', fuente: 'paralelo', ruta: '/historicos/dolares/paralelo' },
+    { moneda: 'EUR', fuente: 'oficial', ruta: '/historicos/euros/oficial' },
+    { moneda: 'EUR', fuente: 'paralelo', ruta: '/historicos/euros/paralelo' },
+  ]
+
+  const dolaresHistoricos = []
+  const eurosHistoricos = []
+
+  para (const { moneda, fuente, ruta } de rutas) {
+    const filas = db.prepare(
+      `SELECT * FROM cotizaciones
+       WHERE (moneda, fuente, fechaActualizacion) IN (
+         SELECT moneda, fuente, max(fechaActualizacion)
+         FROM cotizaciones
+         WHERE moneda = ? AND fuente = ?
+         GROUP BY moneda, fuente, date(fechaActualizacion)
+       )
+       ORDER BY fechaActualizacion`,
+    ).all(moneda, fuente)
+
+    const historico = filas.mapear((f) => {
+      const item = {
+        fuente,
+        compra: f.compra,
+        venta: f.venta,
+        promedio: f.promedio,
+        fecha: f.fechaActualizacion.rodaja(0, 10),
+      }
+      si (moneda === 'EUR')
+        item.moneda = 'EUR'
+      retornar item
+    })
+
+    esperar escribirRutaRegion('ve', ruta, historico)
+
+    si (moneda === 'USD') {
+      dolaresHistoricos.agregar({ fuente, historico })
+    } sino {
+      eurosHistoricos.agregar({ fuente, historico })
+    }
+  }
+
+  cerrarBD(db)
+
+  funcion aplanarPorDia(historicos) {
+    const porFecha = {}
+    historicos.paraCada(({ fuente, historico }) => {
+      historico.paraCada((item) => {
+        const fecha = item.fecha
+        si (!porFecha[fecha])
+          porFecha[fecha] = {}
+        porFecha[fecha][fuente] = item
+      })
+    })
+    const fechas = Object.claves(porFecha).ordenar()
+    const resultado = []
+    fechas.paraCada((fecha) => {
+      ['oficial', 'paralelo'].paraCada((fuente) => {
+        const item = porFecha[fecha][fuente]
+        si (item) {
+          resultado.agregar({
+            fuente,
+            compra: item.compra,
+            venta: item.venta,
+            promedio: item.promedio,
+            fecha,
+          })
+        }
+      })
+    })
+    retornar resultado
+  }
+
+  esperar escribirRutaRegion('ve', '/historicos/dolares', aplanarPorDia(dolaresHistoricos))
+  esperar escribirRutaRegion('ve', '/historicos/euros', aplanarPorDia(eurosHistoricos).mapear((e) => ({ ...e, moneda: 'EUR' })))
+}
+
+asincrono funcion extraerEuros(log) {
+  const [errorEurBcv, oficial] = esperar tryToCatch(extraerEurBcv)
+
+  si (errorEurBcv) {
+    logError(log, errorEurBcv, { extractor: 'bcv.extractor.esjs (EUR)' })
+  }
+
+  const [errorEurYadio, paralelo] = esperar tryToCatch(extraerEurYadio)
+
+  si (errorEurYadio) {
+    logError(log, errorEurYadio, { extractor: 'yadio.extractor.esjs (EUR)' })
+  }
+
+  retornar { oficial, paralelo }
+}

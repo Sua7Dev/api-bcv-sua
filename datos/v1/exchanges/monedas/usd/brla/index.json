@@ -1,0 +1,38 @@
+[
+  {
+    "exchange": "belo",
+    "moneda": "BRLa",
+    "monedaBase": "USD",
+    "criptomoneda": null,
+    "criptomonedaBase": "USDT",
+    "compra": 5.28,
+    "venta": 5.205
+  },
+  {
+    "exchange": "belo",
+    "moneda": "BRLa",
+    "monedaBase": "USD",
+    "criptomoneda": null,
+    "criptomonedaBase": "USDC",
+    "compra": 5.287391208,
+    "venta": 5.1961530615
+  },
+  {
+    "exchange": "belo",
+    "moneda": "BRLa",
+    "monedaBase": "USD",
+    "criptomoneda": null,
+    "criptomonedaBase": "USDT",
+    "compra": 5.28,
+    "venta": 5.205
+  },
+  {
+    "exchange": "belo",
+    "moneda": "BRLa",
+    "monedaBase": "USD",
+    "criptomoneda": null,
+    "criptomonedaBase": "USDC",
+    "compra": 5.287391208,
+    "venta": 5.1961530615
+  }
+]

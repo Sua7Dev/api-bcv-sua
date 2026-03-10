@@ -1,0 +1,11 @@
+[
+  {
+    "exchange": "plus",
+    "moneda": "BRL",
+    "monedaBase": "USD",
+    "criptomoneda": null,
+    "criptomonedaBase": "USDT",
+    "compra": 5.07,
+    "venta": null
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "exchange": "belo",
+    "moneda": "ARS",
+    "monedaBase": "BRLa",
+    "compra": 284.72622478386165,
+    "venta": 276.8939393939394
+  },
+  {
+    "exchange": "belo",
+    "moneda": "BRLa",
+    "monedaBase": "BRLa",
+    "compra": 1,
+    "venta": 1
+  },
+  {
+    "exchange": "belo",
+    "moneda": "ARGt",
+    "monedaBase": "BRLa",
+    "compra": 284.72622478386165,
+    "venta": 276.8939393939394
+  }
+]
