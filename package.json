@@ -1,5 +1,5 @@
 {
-  "name": "esjs-dolar-api",
+  "name": "api-sua-bcv",
   "private": true,
   "type": "module",
   "repository": {
@@ -9,31 +9,30 @@
   "author": "Enzo Notario <hi@enzonotario.me>",
   "license": "MIT",
   "scripts": {
-    "dev": "vite",
-    "build": "pnpm run docs:build && pnpm run data:copy && pnpm run api:build",
-    "serve": "vite preview",
-    "api:build": "vite build --config vite.api.config.js --ssr --mode=production",
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs",
-    "docs:i18n-extract": "npx vue-i18n-extract report --vueFiles './docs/.vitepress/**/*.?(js|vue|md)' --languageFiles './docs/.vitepress/theme/locales/*.?(json|yml|yaml)'",
-    "docs:gen": "node --experimental-loader esjs-loader scripts/generadores/generar.esjs",
-    "format": "prettier --write '**/*.esjs'",
-    "data:copy": "node --experimental-loader esjs-loader scripts/datos.esjs",
-    "seed:ve": "node --experimental-loader esjs-loader scripts/seed-ve-db.esjs",
+    "dev": "bunx vite",
+    "build": "bun run docs:build && bun run data:copy && bun run api:build",
+    "serve": "bunx vite preview",
+    "api:build": "bunx vite build --config vite.api.config.js --ssr --mode=production",
+    "docs:dev": "bunx vitepress dev docs",
+    "docs:build": "bunx vitepress build docs",
+    "docs:preview": "bunx vitepress preview docs",
+    "docs:i18n-extract": "bunx vue-i18n-extract report --vueFiles './docs/.vitepress/**/*.?(js|vue|md)' --languageFiles './docs/.vitepress/theme/locales/*.?(json|yml|yaml)'",
+    "docs:gen": "bun run scripts/generadores/generar.js",
+    "format": "prettier --write '**/*.js'",
+    "data:copy": "bun run scripts/datos.js",
+    "seed:ve": "bun run scripts/seed-ve-db.js",
     "cron:build": "vite build --config vite.config.js --ssr --mode=production",
-    "cron:run": "node ./dist/cron/index.js",
+    "cron:run": "bun run ./dist/cron/index.js",
     "cron:test": "vitest --config vite.config.js",
     "cron:test:ui": "vitest --ui",
     "cron:test:run": "vitest run",
-    "og:dev": "x-satori -t ./og/Template.vue -c og/config.esjs --dev",
-    "og:build": "x-satori -t ./og/Template.vue -c og/config.esjs -o image.svg",
-    "og:png": "node --experimental-loader esjs-loader og/gen-png.esjs"
+    "og:dev": "x-satori -t ./og/Template.vue -c og/config.js --dev",
+    "og:build": "x-satori -t ./og/Template.vue -c og/config.js -o image.svg",
+    "og:png": "bun run og/gen-png.js"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^6.4.1",
     "@egoist/tailwindcss-icons": "^1.9.0",
-    "@es-js/vite-plugin-esjs": "0.1.0-alpha.13",
     "@faker-js/faker": "^10.1.0",
     "@fontsource/inter": "^5.2.8",
     "@hono/vite-dev-server": "^0.23.0",
@@ -49,7 +48,6 @@
     "collect.js": "^4.36.1",
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",
-    "esjs-loader": "^0.0.1",
     "eslint": "^9.39.1",
     "eslint-plugin-import": "^2.32.0",
     "genji-theme-vitepress": "^0.2.8",
@@ -62,7 +60,6 @@
     "playwright": "^1.57.0",
     "postcss": "^8.5.6",
     "prettier": "3.0.3",
-    "prettier-plugin-esjs": "0.1.0-alpha.13",
     "sitemap": "^9.0.0",
     "tailwindcss": "^3.4.3",
     "try-to-catch": "^3.0.1",
@@ -81,5 +78,7 @@
     "better-sqlite3": "^12.5.0",
     "dotenv": "^17.2.3"
   },
-  "packageManager": "pnpm@10.24.0"
+  "workspaces": [
+    "."
+  ]
 }
