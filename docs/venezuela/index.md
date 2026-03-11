@@ -81,7 +81,7 @@ https://ve.dolarapi.com
 
 ## Aviso Legal
 
-DolarApi.com es un proyecto de código abierto que brinda datos de fuentes públicas. Para más información, consulta la seción de [Aviso Legal](/legal).
+DolarApi.com es un proyecto de código abierto que brinda datos de fuentes públicas. Para más información, consulta la [Licencia MIT](https://github.com/Sua7Dev/api-bcv-sua/blob/main/LICENSE).
 
 ## Sponsors
 

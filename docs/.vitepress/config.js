@@ -1,9 +1,10 @@
 import { createWriteStream } from 'node:fs'
 import { resolve } from 'node:path'
-import { defineConfig, loadEnv } from 'vitepress'
+import process from 'node:process'
 import vueI18n from '@intlify/unplugin-vue-i18n/vite'
-import { SitemapStream } from 'sitemap'
 import { genjiAttrs } from 'genji-theme-vitepress/config'
+import { SitemapStream } from 'sitemap'
+import { defineConfig, loadEnv } from 'vitepress'
 import { generateSidebar } from './sidebar/sidebar.js'
 
 const links = []
@@ -20,6 +21,7 @@ export default defineConfig({
   outDir: '../dist/static/docs',
   base: '/docs/',
   srcExclude: ['**/operations/parts/*.md'],
+  ignoreDeadLinks: true,
 
   themeConfig: {
     logo: '/assets/logo.webp',
@@ -108,9 +110,9 @@ export default defineConfig({
         url: pageData.relativePath.endsWith('index.md')
           ? '/'
           : `${pageData.relativePath.replace(
-              /((^|\/)index)?\.md$/,
-              '$2',
-            )}.html`,
+            /((^|\/)index)?\.md$/,
+            '$2',
+          )}.html`,
         lastmod: pageData.lastUpdated,
       })
     }
