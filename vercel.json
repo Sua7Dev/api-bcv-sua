@@ -1,257 +1,45 @@
 {
+  "version": 2,
   "outputDirectory": "dist/static/",
   "functions": {
     "api/index.js": {
-      "includeFiles": "dist/servidor/**"
+      "includeFiles": "dist/servidor/**",
+      "runtime": "nodejs20.x"
     }
   },
   "rewrites": [
     {
-      "source": "/v1/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "dolarapi.com"
-        }
-      ],
-      "destination": "/ar/v1/:path*"
+      "source": "/v1/:moneda",
+      "destination": "/api/index.js"
     },
     {
-      "source": "/v1/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "cl.dolarapi.com"
-        }
-      ],
-      "destination": "/cl/v1/:path*"
-    },
-    {
-      "source": "/v1/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "ve.dolarapi.com"
-        }
-      ],
-      "destination": "/ve/v1/:path*"
-    },
-    {
-      "source": "/v1/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "uy.dolarapi.com"
-        }
-      ],
-      "destination": "/uy/v1/:path*"
-    },
-    {
-      "source": "/v1/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "mx.dolarapi.com"
-        }
-      ],
-      "destination": "/mx/v1/:path*"
-    },
-    {
-      "source": "/v1/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "bo.dolarapi.com"
-        }
-      ],
-      "destination": "/bo/v1/:path*"
-    },
-    {
-      "source": "/v1/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "br.dolarapi.com"
-        }
-      ],
-      "destination": "/br/v1/:path*"
-    },
-    {
-      "source": "/v1/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "co.dolarapi.com"
-        }
-      ],
-      "destination": "/co/v1/:path*"
-    },
-    {
-      "source": "/",
-      "has": [
-        {
-          "type": "host",
-          "value": "cl.dolarapi.com"
-        }
-      ],
-      "destination": "/docs/chile/"
-    },
-    {
-      "source": "/",
-      "has": [
-        {
-          "type": "host",
-          "value": "ve.dolarapi.com"
-        }
-      ],
-      "destination": "/docs/venezuela/"
-    },
-    {
-      "source": "/",
-      "has": [
-        {
-          "type": "host",
-          "value": "mx.dolarapi.com"
-        }
-      ],
-      "destination": "/docs/mexico/"
-    },
-    {
-      "source": "/",
-      "has": [
-        {
-          "type": "host",
-          "value": "bo.dolarapi.com"
-        }
-      ],
-      "destination": "/docs/bolivia/"
-    },
-    {
-      "source": "/",
-      "has": [
-        {
-          "type": "host",
-          "value": "uy.dolarapi.com"
-        }
-      ],
-      "destination": "/docs/uruguay/"
-    },
-    {
-      "source": "/",
-      "has": [
-        {
-          "type": "host",
-          "value": "br.dolarapi.com"
-        }
-      ],
-      "destination": "/docs/brasil/"
-    },
-    {
-      "source": "/",
-      "has": [
-        {
-          "type": "host",
-          "value": "co.dolarapi.com"
-        }
-      ],
-      "destination": "/docs/colombia/"
-    },
-    {
-      "source": "/",
-      "has": [
-        {
-          "type": "host",
-          "value": "dolarapi.com"
-        }
-      ],
-      "destination": "/docs/"
-    },
-    {
-      "source": "/openapi.json",
-      "has": [
-        {
-          "type": "host",
-          "value": "dolarapi.com"
-        }
-      ],
-      "destination": "/docs/openapi.json"
-    },
-    {
-      "source": "/openapi.json",
-      "has": [
-        {
-          "type": "host",
-          "value": "cl.dolarapi.com"
-        }
-      ],
-      "destination": "/docs/chile/openapi.json"
-    },
-    {
-      "source": "/openapi.json",
-      "has": [
-        {
-          "type": "host",
-          "value": "ve.dolarapi.com"
-        }
-      ],
-      "destination": "/docs/venezuela/openapi.json"
-    },
-    {
-      "source": "/openapi.json",
-      "has": [
-        {
-          "type": "host",
-          "value": "uy.dolarapi.com"
-        }
-      ],
-      "destination": "/docs/uruguay/openapi.json"
-    },
-    {
-      "source": "/openapi.json",
-      "has": [
-        {
-          "type": "host",
-          "value": "br.dolarapi.com"
-        }
-      ],
-      "destination": "/docs/brasil/openapi.json"
-    },
-    {
-      "source": "/openapi.json",
-      "has": [
-        {
-          "type": "host",
-          "value": "co.dolarapi.com"
-        }
-      ],
-      "destination": "/docs/colombia/openapi.json"
-    },
-    {
-      "source": "/favicon.ico",
-      "destination": "/docs/favicon.ico"
-    },
-    {
-      "source": "/cron/(.*)",
+      "source": "/v1/:moneda/:subpath",
       "destination": "/api/index.js"
     },
     {
       "source": "/cron/(.*)",
-      "has": [
-        {
-          "type": "host",
-          "value": "cron.dolarapi.com"
-        }
-      ],
       "destination": "/api/index.js"
     }
   ],
   "headers": [
     {
-      "source": "/v1/:path*",
+      "source": "/v1/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=3600, s-maxage=3600"
+          "value": "public, max-age=60, s-maxage=60, stale-while-revalidate=30"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
         }
       ]
     }
