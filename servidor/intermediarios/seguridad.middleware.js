@@ -1,8 +1,8 @@
-import process from 'node:process'
+import { env } from './env.js'
 
 export async function seguridadMiddleware(c, next) {
   const apiKey = c.req.header('x-api-key')
-  const validKey = process.env.VITE_API_KEY
+  const validKey = env.VITE_API_KEY
 
   // Si no hay API_KEY configurada en el servidor, permitimos el paso (dev mode)
   if (!validKey) {

@@ -1,10 +1,10 @@
-import process from 'node:process'
 import { verify } from 'hono/jwt'
+import { env } from './env.js'
 
 export function qstashMiddleware() {
   return async (c, next) => {
     const signature = c.req.header('Upstash-Signature')
-    const secret = process.env.QSTASH_CURRENT_SIGNING_KEY || process.env.VITE_QSTASH_CURRENT_SIGNING_KEY
+    const secret = env.QSTASH_CURRENT_SIGNING_KEY || env.VITE_QSTASH_CURRENT_SIGNING_KEY
 
     if (!signature || !secret) {
       return new Response('No autorizado', { status: 401 })
