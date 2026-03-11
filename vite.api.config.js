@@ -1,17 +1,17 @@
-import { URL, fileURLToPath } from 'node:url'
-import { defineConfig } from 'vite'
+import { fileURLToPath, URL } from 'node:url'
 import devServer from '@hono/vite-dev-server'
+import { defineConfig } from 'vite'
 
 export default defineConfig({
   plugins: [
     devServer({
-      entry: './api/api.js',
+      entry: './servidor/api.js',
     }),
   ],
 
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./api', import.meta.url)),
+      '@': fileURLToPath(new URL('./servidor', import.meta.url)),
     },
     extensions: ['.js', '.json', '.jsx', '.mjs', '.ts', '.tsx'],
   },
@@ -20,7 +20,7 @@ export default defineConfig({
     outDir: './dist',
     emptyOutDir: false,
     rollupOptions: {
-      input: './api/api.js',
+      input: './servidor/api.js',
       output: {
         format: 'esm',
         entryFileNames: 'servidor/[name].js',
