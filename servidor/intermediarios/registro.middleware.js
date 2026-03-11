@@ -1,4 +1,6 @@
-export const registroMiddleware = async (c, next) => {
+import process from 'node:process'
+
+export async function registroMiddleware(c, next) {
   const start = performance.now()
   await next()
   const duration = performance.now() - start
@@ -26,7 +28,7 @@ export const registroMiddleware = async (c, next) => {
     fetch(`https://api.axiom.co/v1/datasets/${axiomDataset}/ingest`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${axiomToken}`,
+        'Authorization': `Bearer ${axiomToken}`,
         'Content-Type': 'application/json',
         ...(axiomOrgId && { 'X-Axiom-Org-Id': axiomOrgId }),
       },

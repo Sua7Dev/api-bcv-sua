@@ -38,10 +38,19 @@ app.use('/v1/*', seguridadMiddleware)
 
 app.get('/', c => c.text('API SUA-BCV is running 🚀'))
 
-// Embudo: Procesamiento secuencial de peticiones (best effort en Edge)
+// Embudo: Procesamiento secuencial de peticiones con tiempo de espera de seguridad
 let cola = Promise.resolve()
 async function embudo(fn) {
-  const result = cola.then(fn)
+  const result = cola.then(async () => {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 8000) // 8s safety timeout
+    try {
+      return await fn()
+    }
+    finally {
+      clearTimeout(timeout)
+    }
+  })
   cola = result.catch(() => {})
   return result
 }
