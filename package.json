@@ -9,6 +9,9 @@
     "url": "git+https://github.com/Sua7Dev/api-bcv-sua.git"
   },
   "packageManager": "bun@1.1.2",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "bunx vite --config vite.api.config.js",
     "build": "bun run docs:build && bun run data:copy && bun run api:build",
@@ -72,7 +75,6 @@
     "try-to-catch": "^3.0.1",
     "tsx": "3.12.7",
     "typescript": "^5.9.3",
-    "vercel": "^48.12.1",
     "vite": "^7.2.6",
     "vitepress": "^1.6.4",
     "vitepress-openapi": "^0.1.16",
