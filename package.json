@@ -1,15 +1,15 @@
 {
   "name": "api-sua-bcv",
-  "private": true,
   "type": "module",
+  "private": true,
+  "author": "SUA",
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/enzonotario/esjs-dolar-api.git"
+    "url": "git+https://github.com/Sua7Dev/api-bcv-sua.git"
   },
-  "author": "Enzo Notario <hi@enzonotario.me>",
-  "license": "MIT",
   "scripts": {
-    "dev": "bunx vite",
+    "dev": "bunx vite --config vite.api.config.js",
     "build": "bun run docs:build && bun run data:copy && bun run api:build",
     "serve": "bunx vite preview",
     "api:build": "bunx vite build --config vite.api.config.js --ssr --mode=production",
@@ -21,14 +21,18 @@
     "format": "prettier --write '**/*.js'",
     "data:copy": "bun run scripts/datos.js",
     "seed:ve": "bun run scripts/seed-ve-db.js",
-    "cron:build": "vite build --config vite.config.js --ssr --mode=production",
-    "cron:run": "bun run ./dist/cron/index.js",
-    "cron:test": "vitest --config vite.config.js",
-    "cron:test:ui": "vitest --ui",
-    "cron:test:run": "vitest run",
-    "og:dev": "x-satori -t ./og/Template.vue -c og/config.js --dev",
-    "og:build": "x-satori -t ./og/Template.vue -c og/config.js -o image.svg",
+    "cron:build": "bunx vite build --config vite.config.js --ssr --mode=production",
+    "cron:run": "bun run ./cron/index.js",
+    "cron:test": "bunx vitest --config vite.config.js",
+    "cron:test:ui": "bunx vitest --ui",
+    "cron:test:run": "bunx vitest run",
+    "og:dev": "bunx x-satori -t ./og/Template.vue -c og/config.js --dev",
+    "og:build": "bunx x-satori -t ./og/Template.vue -c og/config.js -o image.svg",
     "og:png": "bun run og/gen-png.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.5.0",
+    "dotenv": "^17.2.3"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^6.4.1",
@@ -73,12 +77,5 @@
     "vue": "^3.5.25",
     "vue-i18n": "^11.2.2",
     "x-satori": "0.1.5"
-  },
-  "dependencies": {
-    "better-sqlite3": "^12.5.0",
-    "dotenv": "^17.2.3"
-  },
-  "workspaces": [
-    "."
-  ]
+  }
 }
