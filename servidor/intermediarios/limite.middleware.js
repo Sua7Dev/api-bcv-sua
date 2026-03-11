@@ -22,16 +22,29 @@ export async function limiteMiddleware(c, next) {
   }
 
   const ip = c.req.header('x-forwarded-for') || '127.0.0.1'
-  const { success, limit, remaining, reset } = await ratelimit.limit(ip)
+  console.warn(`[DEBUG] Comprobando límite para IP: ${ip}`)
 
-  c.header('X-RateLimit-Limit', limit.toString())
-  c.header('X-RateLimit-Remaining', remaining.toString())
-  c.header('X-RateLimit-Reset', reset.toString())
+  try {
+    // Timeout de seguridad de 2s para Upstash
+    const { success, limit, remaining, reset } = await Promise.race([
+      ratelimit.limit(ip),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('Upstash Timeout')), 2000)),
+    ])
+    console.warn(`[DEBUG] Límite: ${remaining}/${limit}`)
 
-  if (!success) {
-    return c.json({
-      error: 'Límite de peticiones excedido (máximo 60 por minuto).',
-    }, 429)
+    c.header('X-RateLimit-Limit', limit.toString())
+    c.header('X-RateLimit-Remaining', remaining.toString())
+    c.header('X-RateLimit-Reset', reset.toString())
+
+    if (!success) {
+      return c.json({
+        error: 'Límite de peticiones excedido (máximo 60 por minuto).',
+      }, 429)
+    }
+  }
+  catch (error) {
+    console.warn(`[DEBUG] Fallo en Rate Limit (usando fallback): ${error.message}`)
+    // Si falla Redis, permitimos que la petición pase por seguridad
   }
 
   await next()

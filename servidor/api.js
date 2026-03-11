@@ -37,6 +37,12 @@ app.use('/v1/*', limiteMiddleware)
 app.use('/v1/*', seguridadMiddleware)
 
 app.get('/', c => c.text('API SUA-BCV is running 🚀'))
+app.get('/ping', c => c.text('pong'))
+
+app.use('*', async (c, next) => {
+  console.warn(`[DEBUG] Recibida petición: ${c.req.method} ${c.req.path}`)
+  await next()
+})
 
 // Embudo: Procesamiento secuencial de peticiones con tiempo de espera de seguridad
 let cola = Promise.resolve()
