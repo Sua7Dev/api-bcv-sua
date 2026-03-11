@@ -3,8 +3,8 @@
   "outputDirectory": "dist/static/",
   "functions": {
     "api/index.js": {
-      "includeFiles": "dist/servidor/**",
-      "runtime": "nodejs20.x"
+      "runtime": "edge",
+      "includeFiles": "dist/servidor/**"
     }
   },
   "rewrites": [
