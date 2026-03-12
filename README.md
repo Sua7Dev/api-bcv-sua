@@ -1,61 +1,128 @@
 # API SUA-BCV 🚀
 
-API oficial de SUA para la consulta de tipos de cambio (BCV, Paralelo, etc.) en Venezuela y otras regiones. Migrada de EsJs a JavaScript puro para máxima compatibilidad con Bun y Vercel.
+API oficial de SUA para la consulta de tipos de cambio (BCV, Paralelo, etc.) en Venezuela. Migrada de EsJs a JavaScript puro con Edge Runtime en Vercel.
 
 ## 🛠️ Stack Tecnológico
-- **Runtime:** [Bun](https://bun.sh/) (Exclusivo)
-- **Framework:** [Hono](https://hono.dev/)
-- **Observabilidad:** [Axiom](https://axiom.co/) (Logs estructurados)
-- **Base de Datos:** SQLite via `better-sqlite3`
-- **Despliegue:** [Vercel](https://vercel.com/) (Edge/Serverless Functions)
 
-## 📡 Estructura de Endpoints
-Todas las rutas de la API siguen el formato:
-- `https://api-sua-bcv/v1/:moneda`
+| Tecnología | Uso |
+|---|---|
+| [Bun](https://bun.sh/) | Runtime y gestor de paquetes (exclusivo) |
+| [Hono](https://hono.dev/) | Framework HTTP (Edge-compatible) |
+| [Vercel Edge Functions](https://vercel.com/docs/functions/edge-functions) | Despliegue en el Edge global |
+| [Upstash Redis](https://upstash.com/) | Rate Limiting (60 req/min por IP) |
+| [Axiom](https://axiom.co/) | Observabilidad y logs estructurados |
+| [GitHub Actions](https://github.com/features/actions) | Cron jobs automáticos cada 30 minutos |
 
-### Ejemplos:
-- `/v1/usd`: Cotización del Dólar (BCV y Paralelo).
-- `/v1/eur`: Cotización del Euro.
+---
 
-## 💻 Desarrollo y Despliegue
+## 📡 Endpoints
+
+**Base URL:** `https://api-bcv-sua.vercel.app`
+
+> ⚠️ Todas las rutas `/v1/*` requieren el header `x-api-key: TU_CLAVE`.
+
+### Diagnóstico
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| `GET` | `/ping` | Health check. Devuelve `{"status":"ok"}` si la API está activa. |
+
+### Venezuela — Cotizaciones en tiempo real
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| `GET` | `/v1/usd` | Cotización del Dólar (BCV Oficial + Paralelo/Yadio) |
+| `GET` | `/v1/eur` | Cotización del Euro (BCV Oficial + Paralelo) |
+| `GET` | `/v1/cotizaciones` | Todas las cotizaciones disponibles en un solo objeto |
+| `GET` | `/v1/estado` | Estado del servicio y última actualización |
+
+### Venezuela — Históricos
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| `GET` | `/v1/historicos/dolares` | Histórico completo de cotizaciones del Dólar |
+| `GET` | `/v1/historicos/euros` | Histórico completo de cotizaciones del Euro |
+
+---
+
+## 🔒 Seguridad
+
+- **API Key:** Todas las rutas `/v1/*` requieren el header `x-api-key`.
+- **Rate Limiting:** Máximo 60 peticiones por minuto por IP (vía Upstash Redis).
+- **CORS:** Configurado en Vercel para acceso controlado.
+
+---
+
+## 💻 Desarrollo Local
 
 ### Requisitos
-- Tener instalado **Bun**.
+- [Bun](https://bun.sh/) instalado
 
 ### Instalación
 ```bash
 bun install
 ```
 
-### Entorno (.env)
-Configura las siguientes variables:
-- `VITE_API_KEY`: Tu clave secreta para proteger la API (obligatoria en producción).
-- `UPSTASH_REDIS_REST_URL` & `UPSTASH_REDIS_REST_TOKEN`: Para el Rate Limiting.
-- `VITE_GITHUB_TOKEN`: Acceso a GitHub API para crons.
-- `VITE_AXIOM_TOKEN`, `VITE_AXIOM_ORG_ID`, `VITE_AXIOM_DATASET`: Credenciales de Axiom.
+### Variables de entorno (`.env`)
+
+Copia `.env.example` a `.env` y completa:
+
+```env
+# API Key para proteger los endpoints
+VITE_API_KEY="tu_clave_secreta"
+
+# Redis para Rate Limiting (Upstash)
+UPSTASH_REDIS_REST_URL="https://..."
+UPSTASH_REDIS_REST_TOKEN="..."
+
+# GitHub — Para trigger de crons
+VITE_GITHUB_TOKEN="ghp_..."
+
+# Axiom — Observabilidad
+VITE_AXIOM_TOKEN="xaat-..."
+VITE_AXIOM_ORG_ID="..."
+VITE_AXIOM_DATASET="..."
+```
+
+### Comandos
+
+```bash
+bun dev           # Servidor de desarrollo en localhost:5173
+bun run build     # Build completo (docs + API)
+bun run cron:run  # Ejecutar scrapers manualmente
+```
+
+### Prueba de la API
+
+```bash
+bun run tests/test.api.js
+```
+
+---
 
 ## 🚀 Despliegue en Vercel
 
-1. **Instalar Vercel CLI** (opcional):
-   ```bash
-   bun add -g vercel
-   ```
+1. Conecta el repositorio en [vercel.com/new](https://vercel.com/new).
+2. En **Settings → Environment Variables**, añade todas las variables del `.env`.
+3. Haz `git push` — Vercel despliega automáticamente.
 
-2. **Configurar Variables de Entorno**:
-   Ve al dashboard de Vercel > Settings > Environment Variables y añade todas las variables del `.env`.
+---
 
-3. **Desplegar**:
-   ```bash
-   vercel
-   ```
-   O simplemente conecta tu repositorio de GitHub a Vercel. El archivo `vercel.json` ya está configurado para manejar el ruteo y las funciones.
+## ⚙️ Automatización (GitHub Actions)
 
-## 🔒 Seguridad
-- **Rate Limiting**: 60 peticiones por minuto por IP (vía Upstash).
-- **API Key**: Las peticiones deben incluir el header `x-api-key: tu_clave_secreta`.
-- **Embudo**: Procesamiento secuencial para evitar picos de CPU.
+El workflow `.github/workflows/cron.yml` se ejecuta automáticamente **cada 30 minutos** para actualizar los precios desde BCV y Yadio. También puede ejecutarse manualmente desde la pestaña **Actions** de GitHub.
 
-## 📝 Notas de Versión
-- Migración completa de EsJs a JavaScript estándar.
-- Implementación de seguridad avanzada y rate limiting.
-- Optimizado para Bun Runtime y Vercel Edge Functions.
+Requiere los siguientes **Secrets** en el repositorio:
+`VITE_API_KEY`, `VITE_GITHUB_TOKEN`, `VITE_AXIOM_TOKEN`, `VITE_AXIOM_ORG_ID`, `VITE_AXIOM_DATASET`
+
+---
+
+## 📝 Ejemplo de Uso
+
+```js
+const respuesta = await fetch('https://api-bcv-sua.vercel.app/v1/usd', {
+  headers: { 'x-api-key': 'TU_CLAVE_SECRETA' }
+})
+const datos = await respuesta.json()
+// [{ "fuente": "oficial", "nombre": "Oficial", "promedio": 438.20, ... }]
+```
