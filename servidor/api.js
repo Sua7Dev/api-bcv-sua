@@ -25,7 +25,8 @@ const MONEDA_MAP = {
 }
 
 const GITHUB_URL = 'https://raw.githubusercontent.com/Sua7Dev/api-bcv-sua/main/datos'
-const DATA_BASE = import.meta.env.DEV ? 'http://localhost:5173/datos' : GITHUB_URL
+const isDev = typeof import.meta.env !== 'undefined' && import.meta.env?.DEV
+const DATA_BASE = isDev ? 'http://localhost:5173/datos' : GITHUB_URL
 
 // Helper para obtener datos de moneda
 async function obtenerDatos(region, subPath) {
