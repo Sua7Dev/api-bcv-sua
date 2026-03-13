@@ -1,6 +1,3 @@
-import fs from 'node:fs'
-import path from 'node:path'
-import process from 'node:process'
 import { Hono } from 'hono'
 import { timing } from 'hono/timing'
 import { limiteMiddleware } from './intermediarios/limite.middleware.js'
@@ -34,15 +31,18 @@ async function obtenerDatos(region, subPath) {
   const lowPath = subPath.toLowerCase()
   const normalizedPath = MONEDA_MAP[lowPath] || lowPath
 
-  // Priorizar lectura del sistema de archivos local si existe
-  try {
-    const rutaLocal = path.join(process.cwd(), 'datos', region, 'v1', normalizedPath, 'index.json')
-    if (fs.existsSync(rutaLocal)) {
-      return JSON.parse(fs.readFileSync(rutaLocal, 'utf-8'))
+  // Priorizar lectura local solo en desarrollo para no romper Edge
+  if (import.meta.env.DEV) {
+    try {
+      const { leerDatosLocales } = await import('./dev-utils.js')
+      const datos = await leerDatosLocales(region, normalizedPath)
+      if (datos) {
+        return datos
+      }
     }
-  }
-  catch {
-    // Si falla local, continuamos a remoto
+    catch {
+      // Ignorar si falla la carga local
+    }
   }
 
   const url = `${DATA_BASE}/${region}/v1/${normalizedPath}/index.json`
