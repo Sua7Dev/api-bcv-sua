@@ -1,8 +1,8 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { faker } from '@faker-js/faker'
 import Database from 'better-sqlite3'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { faker } from '@faker-js/faker'
 
 const directorioTemporal = path.join('datos', 've')
 const archivoBD = path.join(directorioTemporal, 've.test.sqlite')
@@ -19,24 +19,20 @@ describe('guardarCotizacionesVe con SQLite real', () => {
   })
 
   it('crea la base de datos y guarda filas en la primera ejecución', async () => {
-    const { guardarCotizacionesVe } = await import('@/ve/db.ve.esjs')
+    const { guardarCotizacionesVe } = await import('@/ve/db.ve.js')
 
-    const compra = faker.number.float()
-    const venta = compra + faker.number.float()
-    const promedio = (compra + venta) / 2
+    const valor = faker.number.float()
     const fechaActualizacion = faker.date.recent({ days: 3 }).toISOString()
 
     const fila = {
       moneda: 'USD',
       fuente: 'oficial',
       nombre: 'Dólar',
-      compra,
-      venta,
-      promedio,
+      valor,
       fechaActualizacion,
     }
 
-    const ok = guardarCotizacionesVe([fila], archivoBD)
+    const ok = await guardarCotizacionesVe([fila], archivoBD)
     expect(ok).toBe(true)
     expect(fs.existsSync(archivoBD)).toBe(true)
 
@@ -47,40 +43,34 @@ describe('guardarCotizacionesVe con SQLite real', () => {
 
     expect(count).toBe(1)
     expect(usd).toBeTruthy()
-    expect(usd.compra).toBeCloseTo(compra, 2)
+    expect(usd.valor).toBeCloseTo(valor, 2)
   })
 
   it('acumula historial en ejecuciones sucesivas', async () => {
-    const { guardarCotizacionesVe } = await import('@/ve/db.ve.esjs')
+    const { guardarCotizacionesVe } = await import('@/ve/db.ve.js')
 
-    const compra1 = faker.number.float()
-    const venta1 = compra1 + faker.number.float()
-    const promedio1 = (compra1 + venta1) / 2
+    const valor1 = faker.number.float()
     const fechaActualizacion1 = new Date(Date.now() + 1000).toISOString()
 
     const primera = {
       moneda: 'USD',
       fuente: 'oficial',
       nombre: 'Dólar',
-      compra: compra1,
-      venta: venta1,
-      promedio: promedio1,
+      valor: valor1,
       fechaActualizacion: fechaActualizacion1,
     }
 
-    const compra2 = compra1 + faker.number.float()
-    const venta2 = compra2 + faker.number.float()
+    const valor2 = valor1 + 1
     const fechaActualizacion2 = new Date(Date.parse(fechaActualizacion1) + faker.number.int({ min: 1_000, max: 10_000 })).toISOString()
 
     const segunda = {
       ...primera,
-      compra: compra2,
-      venta: venta2,
+      valor: valor2,
       fechaActualizacion: fechaActualizacion2,
     }
 
-    guardarCotizacionesVe([primera], archivoBD)
-    guardarCotizacionesVe([segunda], archivoBD)
+    await guardarCotizacionesVe([primera], archivoBD)
+    await guardarCotizacionesVe([segunda], archivoBD)
 
     const db = new Database(archivoBD)
     const count = db.prepare('SELECT COUNT(*) as c FROM cotizaciones').get().c
@@ -89,35 +79,30 @@ describe('guardarCotizacionesVe con SQLite real', () => {
 
     expect(count).toBe(2)
     expect(usd).toBeTruthy()
-    expect(usd.compra).toBeCloseTo(compra2, 2)
-    expect(usd.venta).toBeCloseTo(venta2, 2)
+    expect(usd.valor).toBeCloseTo(valor2, 2)
   })
 
   it('guarda múltiples cotizaciones con distinta moneda y fuente', async () => {
-    const { guardarCotizacionesVe } = await import('@/ve/db.ve.esjs')
+    const { guardarCotizacionesVe } = await import('@/ve/db.ve.js')
 
     const cotizaciones = [
       {
         moneda: 'USD',
         fuente: 'oficial',
         nombre: 'Dólar',
-        compra: faker.number.float(),
-        venta: faker.number.float(),
-        promedio: faker.number.float(),
+        valor: faker.number.float(),
         fechaActualizacion: faker.date.recent().toISOString(),
       },
       {
         moneda: 'EUR',
         fuente: 'oficial',
         nombre: 'Euro',
-        compra: faker.number.float(),
-        venta: faker.number.float(),
-        promedio: faker.number.float(),
+        valor: faker.number.float(),
         fechaActualizacion: faker.date.recent().toISOString(),
       },
     ]
 
-    guardarCotizacionesVe(cotizaciones, archivoBD)
+    await guardarCotizacionesVe(cotizaciones, archivoBD)
 
     const db = new Database(archivoBD)
     const count = db.prepare('SELECT COUNT(*) as c FROM cotizaciones').get().c

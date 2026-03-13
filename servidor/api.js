@@ -1,3 +1,6 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import process from 'node:process'
 import { Hono } from 'hono'
 import { timing } from 'hono/timing'
 import { limiteMiddleware } from './intermediarios/limite.middleware.js'
@@ -26,12 +29,23 @@ const MONEDA_MAP = {
 
 const DATA_BASE = 'https://raw.githubusercontent.com/Sua7Dev/api-bcv-sua/main/datos'
 
-// Helper para obtener datos de moneda desde GitHub (compatible Edge)
+// Helper para obtener datos de moneda
 async function obtenerDatos(region, subPath) {
   const lowPath = subPath.toLowerCase()
   const normalizedPath = MONEDA_MAP[lowPath] || lowPath
-  const url = `${DATA_BASE}/${region}/v1/${normalizedPath}/index.json`
 
+  // Priorizar lectura del sistema de archivos local si existe
+  try {
+    const rutaLocal = path.join(process.cwd(), 'datos', region, 'v1', normalizedPath, 'index.json')
+    if (fs.existsSync(rutaLocal)) {
+      return JSON.parse(fs.readFileSync(rutaLocal, 'utf-8'))
+    }
+  }
+  catch {
+    // Si falla local, continuamos a remoto
+  }
+
+  const url = `${DATA_BASE}/${region}/v1/${normalizedPath}/index.json`
   try {
     const res = await fetch(url, {
       headers: { 'User-Agent': 'API-SUA-BCV/1.0' },

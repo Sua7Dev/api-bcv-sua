@@ -2,19 +2,8 @@
   {
     "fuente": "oficial",
     "nombre": "Dólar",
-    "moneda": "USD",
-    "compra": null,
-    "venta": null,
-    "promedio": 438.205,
-    "fechaActualizacion": "2026-03-10T23:59:28.654Z"
-  },
-  {
-    "fuente": "oficial",
-    "nombre": "Euro",
-    "moneda": "EUR",
-    "compra": null,
-    "venta": null,
-    "promedio": 510.2108456,
-    "fechaActualizacion": "2026-03-10T23:59:29.270Z"
+    "valor": 40,
+    "fechaActualizacion": "2026-03-13T10:00:00.000Z",
+    "moneda": "USD"
   }
 ]

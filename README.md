@@ -98,6 +98,19 @@ bun run cron:run  # Ejecutar scrapers manualmente
 bun run tests/test.api.js
 ```
 
+### Prueba de la API en local
+
+#### Inicia el servidor en una terminal.
+
+```bash
+bun dev
+```
+#### En otra terminal ejecuta.
+
+```bash
+bun run tests/test.local.js
+```
+
 ---
 
 ## 🚀 Despliegue en Vercel
@@ -124,5 +137,24 @@ const respuesta = await fetch('https://api-bcv-sua.vercel.app/v1/usd', {
   headers: { 'x-api-key': 'TU_CLAVE_SECRETA' }
 })
 const datos = await respuesta.json()
-// [{ "fuente": "oficial", "nombre": "Oficial", "promedio": 438.20, ... }]
+/*
+[
+  {
+    "fuente": "oficial",
+    "nombre": "Oficial",
+    "valor": 445.20,
+    "fechaActualizacion": "...",
+    "valorAnterior": 443.10,
+    "fechaAnterior": "..."
+  }
+]
+*/
 ```
+
+---
+
+## 📅 Lógica de Fin de Semana
+
+Para garantizar la estabilidad en la facturación y consultas durante el cierre bancario:
+- **Sábados y Domingos:** La API ignora tasas publicadas para el lunes siguiente y continúa mostrando la tasa del **viernes** como el valor actual.
+- **Días Laborales:** Muestra siempre el último valor publicado.

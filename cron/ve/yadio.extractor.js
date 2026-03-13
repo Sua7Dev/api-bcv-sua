@@ -50,9 +50,7 @@ function extraerCotizacionesUsd(json) {
     {
       fuente: 'paralelo',
       nombre: 'Paralelo',
-      compra: null,
-      venta: null,
-      promedio: ves,
+      valor: ves,
       fechaActualizacion: new Date().toISOString(),
     },
   ]
@@ -69,9 +67,7 @@ function extraerCotizacionEur(json) {
     fuente: 'euro',
     nombre: 'Euro',
     moneda: 'EUR',
-    compra: null,
-    venta: null,
-    promedio: ves,
+    valor: ves,
     fechaActualizacion: new Date().toISOString(),
   }
 }

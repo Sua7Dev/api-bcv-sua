@@ -1,10 +1,32 @@
-import extraerDolarYadio, { extraerEurYadio } from './yadio.extractor.js'
-import extraerDolarBcv, { extraerEurBcv } from './bcv.extractor.js'
-import { escribirRutaRegion } from '../utils/rutas.js'
-import { guardarCotizacionesVe } from './db.ve.js'
-import { abrirBD, cerrarBD } from '../utils/sqlite.js'
-import { grupo, logError } from '../log.js'
 import tryToCatch from 'try-to-catch'
+import { grupo, logError } from '../log.js'
+import { escribirRutaRegion } from '../utils/rutas.js'
+import { abrirBD, cerrarBD } from '../utils/sqlite.js'
+import extraerDolarBcv, { extraerEurBcv } from './bcv.extractor.js'
+import { guardarCotizacionesVe } from './db.ve.js'
+import extraerDolarYadio, { extraerEurYadio } from './yadio.extractor.js'
+
+function getUltimosValores(db, moneda, fuente) {
+  const today = new Date()
+  const dayOfWeek = today.getDay()
+  let maxDate = today.toISOString()
+
+  // Si es sábado (6) o domingo (0), ignoramos tasas publicadas después del viernes
+  if (dayOfWeek === 0 || dayOfWeek === 6) {
+    const friday = new Date(today)
+    friday.setDate(today.getDate() - (dayOfWeek === 0 ? 2 : 1))
+    friday.setHours(23, 59, 59, 999)
+    maxDate = friday.toISOString()
+  }
+
+  return db.prepare(`
+    SELECT valor, fechaActualizacion
+    FROM cotizaciones
+    WHERE moneda = ? AND fuente = ? AND fechaActualizacion <= ?
+    ORDER BY fechaActualizacion DESC
+    LIMIT 2
+  `).all(moneda, fuente, maxDate)
+}
 
 export default async function () {
   const log = grupo({ cron: 'cron.ve.js' })
@@ -22,97 +44,82 @@ export default async function () {
 
 async function guardarDolares(log) {
   const [errorYadio, dolaresYadio] = await tryToCatch(extraerDolarYadio)
-
   if (errorYadio) {
     logError(log, errorYadio, { extractor: 'yadio.extractor.js' })
   }
 
   const [errorBcv, dolarBcv] = await tryToCatch(extraerDolarBcv)
-
   if (errorBcv) {
     logError(log, errorBcv, { extractor: 'bcv.extractor.js' })
   }
 
   const { oficial: euroBcv, paralelo: euroYadio } = await extraerEuros(log)
 
-  const dolares = []
-
+  const cotizacionesParaDb = []
   if (dolarBcv) {
-    dolares.push(dolarBcv)
+    cotizacionesParaDb.push({ ...dolarBcv, moneda: 'USD' })
   }
-
-  if (dolaresYadio && dolaresYadio.length > 0) {
-    dolares.push(...dolaresYadio)
+  if (dolaresYadio) {
+    cotizacionesParaDb.push(...dolaresYadio.map(d => ({ ...d, moneda: 'USD' })))
   }
-
-  if (dolares.length === 0) {
-    return
-  }
-
-  const orden = ['oficial', 'paralelo']
-
-  dolares.sort((a, b) => {
-    const indexA = orden.indexOf(a.fuente)
-    const indexB = orden.indexOf(b.fuente)
-    return indexA - indexB
-  }).forEach((dolar) => {
-    escribirRutaRegion('ve', `/dolares/${dolar.fuente}`, dolar)
-  })
-
-  escribirRutaRegion('ve', '/dolares', dolares)
-
-  const cotizaciones = []
-
-  if (dolarBcv) {
-    cotizaciones.push({
-      fuente: dolarBcv.fuente,
-      nombre: 'Dólar',
-      moneda: 'USD',
-      compra: dolarBcv.compra,
-      venta: dolarBcv.venta,
-      promedio: dolarBcv.promedio,
-      fechaActualizacion: dolarBcv.fechaActualizacion,
-    })
-  }
-
   if (euroBcv) {
-    cotizaciones.push({
-      fuente: euroBcv.fuente,
-      nombre: euroBcv.nombre,
-      moneda: euroBcv.moneda,
-      compra: euroBcv.compra,
-      venta: euroBcv.venta,
-      promedio: euroBcv.promedio,
-      fechaActualizacion: euroBcv.fechaActualizacion,
-    })
+    cotizacionesParaDb.push({ ...euroBcv, moneda: 'EUR' })
   }
-
-  escribirRutaRegion('ve', '/cotizaciones', cotizaciones)
-
-  const [errorDb] = await tryToCatch(guardarCotizacionesVe, cotizaciones)
-  if (errorDb) {
-    logError(log, errorDb, { accion: 'guardarCotizacionesVe' })
-  }
-
-  const euros = []
-
-  if (euroBcv) {
-    euros.push(euroBcv)
-  }
-
   if (euroYadio) {
-    euros.push({
-      ...euroYadio,
-      fuente: 'paralelo',
-      nombre: 'Paralelo',
-    })
+    cotizacionesParaDb.push({ ...euroYadio, moneda: 'EUR', fuente: 'paralelo', nombre: 'Paralelo' })
   }
 
-  euros.forEach((euro) => {
-    escribirRutaRegion('ve', `/euros/${euro.fuente}`, euro)
-  })
+  if (cotizacionesParaDb.length > 0) {
+    const [errorDb] = await tryToCatch(guardarCotizacionesVe, cotizacionesParaDb)
+    if (errorDb) {
+      logError(log, errorDb, { accion: 'guardarCotizacionesVe' })
+    }
+  }
 
-  escribirRutaRegion('ve', '/euros', euros)
+  const db = abrirBD('./datos/ve/ve.sqlite')
+  const monedas = [
+    { moneda: 'USD', fuentes: ['oficial', 'paralelo'], path: 'dolares' },
+    { moneda: 'EUR', fuentes: ['oficial', 'paralelo'], path: 'euros' },
+  ]
+
+  const totalCotizaciones = []
+
+  for (const { moneda, fuentes, path } of monedas) {
+    const listaMoneda = []
+    for (const fuente of fuentes) {
+      const ultimos = getUltimosValores(db, moneda, fuente)
+      if (ultimos.length > 0) {
+        const item = {
+          fuente,
+          nombre: fuente === 'oficial' ? (moneda === 'USD' ? 'Oficial' : 'Euro') : 'Paralelo',
+          valor: ultimos[0].valor,
+          fechaActualizacion: ultimos[0].fechaActualizacion,
+        }
+        if (ultimos.length > 1) {
+          item.valorAnterior = ultimos[1].valor
+          item.fechaAnterior = ultimos[1].fechaActualizacion
+        }
+        if (moneda === 'EUR') {
+          item.moneda = 'EUR'
+        }
+
+        listaMoneda.push(item)
+        escribirRutaRegion('ve', `/${path}/${fuente}`, item)
+
+        if (fuente === 'oficial') {
+          totalCotizaciones.push({
+            ...item,
+            nombre: moneda === 'USD' ? 'Dólar' : 'Euro',
+            moneda,
+          })
+        }
+      }
+    }
+    escribirRutaRegion('ve', `/${path}`, listaMoneda)
+  }
+
+  escribirRutaRegion('ve', '/cotizaciones', totalCotizaciones)
+  cerrarBD(db)
 
   const [errorHistoricos] = await tryToCatch(generarHistoricos, log)
   if (errorHistoricos) {
@@ -120,7 +127,7 @@ async function guardarDolares(log) {
   }
 }
 
-async function generarHistoricos(log) {
+async function generarHistoricos() {
   const db = abrirBD('./datos/ve/ve.sqlite')
 
   const rutas = [
@@ -148,9 +155,7 @@ async function generarHistoricos(log) {
     const historico = filas.map((f) => {
       const item = {
         fuente,
-        compra: f.compra,
-        venta: f.venta,
-        promedio: f.promedio,
+        valor: f.valor,
         fecha: f.fechaActualizacion.slice(0, 10),
       }
       if (moneda === 'EUR')
@@ -162,7 +167,8 @@ async function generarHistoricos(log) {
 
     if (moneda === 'USD') {
       dolaresHistoricos.push({ fuente, historico })
-    } else {
+    }
+    else {
       eurosHistoricos.push({ fuente, historico })
     }
   }
@@ -187,9 +193,7 @@ async function generarHistoricos(log) {
         if (item) {
           resultado.push({
             fuente,
-            compra: item.compra,
-            venta: item.venta,
-            promedio: item.promedio,
+            valor: item.valor,
             fecha,
           })
         }
@@ -199,6 +203,7 @@ async function generarHistoricos(log) {
   }
 
   await escribirRutaRegion('ve', '/historicos/dolares', aplanarPorDia(dolaresHistoricos))
+  // eslint-disable-next-line style/arrow-parens
   await escribirRutaRegion('ve', '/historicos/euros', aplanarPorDia(eurosHistoricos).map((e) => ({ ...e, moneda: 'EUR' })))
 }
 

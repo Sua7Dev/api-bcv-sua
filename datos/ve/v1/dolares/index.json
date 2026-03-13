@@ -2,9 +2,9 @@
   {
     "fuente": "oficial",
     "nombre": "Oficial",
-    "compra": null,
-    "venta": null,
-    "promedio": 438.205,
-    "fechaActualizacion": "2026-03-10T23:59:28.654Z"
+    "valor": 443.2587,
+    "fechaActualizacion": "2026-03-13T00:10:20.440Z",
+    "valorAnterior": 442.7587,
+    "fechaAnterior": "2026-03-12T00:10:20.440Z"
   }
 ]

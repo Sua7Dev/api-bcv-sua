@@ -1,6 +1,6 @@
+import https from 'node:https'
 import axios from 'axios'
 import * as cheerio from 'cheerio'
-import https from 'https'
 import tryToCatch from 'try-to-catch'
 import { grupo, logError } from '../log.js'
 
@@ -78,17 +78,19 @@ function extraerCotizacion(html) {
     })
   }
 
-  if (!valorUsd) return null
+  if (!valorUsd) {
+    return null
+  }
 
   const valorNumerico = interpretarValorMonetario(valorUsd)
-  if (!valorNumerico) return null
+  if (!valorNumerico) {
+    return null
+  }
 
   return {
     fuente: 'oficial',
     nombre: 'Oficial',
-    compra: null,
-    venta: null,
-    promedio: valorNumerico,
+    valor: valorNumerico,
     fechaActualizacion: new Date().toISOString(),
   }
 }
@@ -123,23 +125,25 @@ function extraerCotizacionEur(html) {
     })
   }
 
-  if (!valorEur) return null
+  if (!valorEur) {
+    return null
+  }
 
   const valorNumerico = interpretarValorMonetario(valorEur)
-  if (!valorNumerico) return null
+  if (!valorNumerico) {
+    return null
+  }
 
   return {
     fuente: 'oficial',
     nombre: 'Euro',
     moneda: 'EUR',
-    compra: null,
-    venta: null,
-    promedio: valorNumerico,
+    valor: valorNumerico,
     fechaActualizacion: new Date().toISOString(),
   }
 }
 
 function interpretarValorMonetario(valor) {
   const limpio = valor.replace(/\s/g, '').replace(',', '.')
-  return parseFloat(limpio)
+  return Number.parseFloat(limpio)
 }

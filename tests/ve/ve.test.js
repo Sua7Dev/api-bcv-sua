@@ -2,10 +2,9 @@ import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import Database from 'better-sqlite3'
 import { describe, expect, it } from 'vitest'
-import extraerBcv from '@/ve/bcv.extractor.esjs'
-import { extraerEurBcv } from '@/ve/bcv.extractor.esjs'
-import cron from '@/ve/cron.ve.esjs'
-import extraerYadio, { extraerEurYadio } from '@/ve/yadio.extractor.esjs'
+import extraerBcv, { extraerEurBcv } from '@/ve/bcv.extractor.js'
+import cron from '@/ve/cron.ve.js'
+import extraerYadio, { extraerEurYadio } from '@/ve/yadio.extractor.js'
 
 describe('ve.dolarapi.com', () => {
   it('extraer dolar paralelo de Yadio', async () => {
@@ -13,14 +12,14 @@ describe('ve.dolarapi.com', () => {
 
     expect(cotizaciones).toHaveLength(1)
     expect(cotizaciones[0].fuente).toBe('paralelo')
-    expect(cotizaciones[0].promedio).toBeGreaterThan(0)
+    expect(cotizaciones[0].valor).toBeGreaterThan(0)
   }, 10000)
 
   it('extraer dolar oficial de BCV', async () => {
     const cotizacion = await extraerBcv()
 
     expect(cotizacion.fuente).toBe('oficial')
-    expect(cotizacion.promedio).toBeGreaterThan(0)
+    expect(cotizacion.valor).toBeGreaterThan(0)
   }, 10000)
 
   it('extraer euro oficial de BCV', async () => {
@@ -30,7 +29,7 @@ describe('ve.dolarapi.com', () => {
     expect(cotizacion.fuente).toBe('oficial')
     expect(cotizacion.nombre).toBe('Euro')
     expect(cotizacion.moneda).toBe('EUR')
-    expect(cotizacion.promedio).toBeGreaterThan(0)
+    expect(cotizacion.valor).toBeGreaterThan(0)
     expect(cotizacion.fechaActualizacion).toBeTruthy()
   }, 10000)
 
@@ -41,7 +40,7 @@ describe('ve.dolarapi.com', () => {
     expect(cotizacion.fuente).toBe('euro')
     expect(cotizacion.nombre).toBe('Euro')
     expect(cotizacion.moneda).toBe('EUR')
-    expect(cotizacion.promedio).toBeGreaterThan(0)
+    expect(cotizacion.valor).toBeGreaterThan(0)
     expect(cotizacion.fechaActualizacion).toBeTruthy()
   }, 10000)
 
@@ -57,17 +56,13 @@ describe('ve.dolarapi.com', () => {
       {
         fuente: 'oficial',
         nombre: 'Oficial',
-        compra: null,
-        venta: null,
-        promedio: expect.any(Number),
+        valor: expect.any(Number),
         fechaActualizacion: expect.any(String),
       },
       {
         fuente: 'paralelo',
         nombre: 'Paralelo',
-        compra: null,
-        venta: null,
-        promedio: expect.any(Number),
+        valor: expect.any(Number),
         fechaActualizacion: expect.any(String),
       },
     ])
@@ -81,18 +76,14 @@ describe('ve.dolarapi.com', () => {
         fuente: 'oficial',
         nombre: 'Dólar',
         moneda: 'USD',
-        compra: null,
-        venta: null,
-        promedio: expect.any(Number),
+        valor: expect.any(Number),
         fechaActualizacion: expect.any(String),
       },
       {
         fuente: 'oficial',
         nombre: 'Euro',
         moneda: 'EUR',
-        compra: null,
-        venta: null,
-        promedio: expect.any(Number),
+        valor: expect.any(Number),
         fechaActualizacion: expect.any(String),
       },
     ])
@@ -105,9 +96,7 @@ describe('ve.dolarapi.com', () => {
       fuente: 'oficial',
       nombre: 'Euro',
       moneda: 'EUR',
-      compra: null,
-      venta: null,
-      promedio: expect.any(Number),
+      valor: expect.any(Number),
       fechaActualizacion: expect.any(String),
     })
     if (euros.length > 1) {
@@ -115,9 +104,7 @@ describe('ve.dolarapi.com', () => {
         fuente: 'paralelo',
         nombre: 'Paralelo',
         moneda: 'EUR',
-        compra: null,
-        venta: null,
-        promedio: expect.any(Number),
+        valor: expect.any(Number),
         fechaActualizacion: expect.any(String),
       })
     }
@@ -138,15 +125,15 @@ describe('ve.dolarapi.com', () => {
       fuente: 'oficial',
       nombre: 'Euro',
     })
-    expect(usd.promedio).toBeGreaterThan(0)
-    expect(eur.promedio).toBeGreaterThan(0)
+    expect(usd.valor).toBeGreaterThan(0)
+    expect(eur.valor).toBeGreaterThan(0)
 
     const historicoOficial = JSON.parse(readFileSync(resolve('datos/ve/v1/historicos/dolares/oficial/index.json'), 'utf-8'))
     expect(Array.isArray(historicoOficial)).toBe(true)
     expect(historicoOficial.length).toBeGreaterThan(0)
     expect(historicoOficial[0]).toMatchObject({
       fuente: 'oficial',
-      promedio: expect.any(Number),
+      valor: expect.any(Number),
       fecha: expect.any(String),
     })
   }, 60000)
