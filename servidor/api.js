@@ -24,26 +24,13 @@ const MONEDA_MAP = {
   eur: 'euros',
 }
 
-const DATA_BASE = 'https://raw.githubusercontent.com/Sua7Dev/api-bcv-sua/main/datos'
+const GITHUB_URL = 'https://raw.githubusercontent.com/Sua7Dev/api-bcv-sua/main/datos'
+const DATA_BASE = import.meta.env.DEV ? 'http://localhost:5173/datos' : GITHUB_URL
 
 // Helper para obtener datos de moneda
 async function obtenerDatos(region, subPath) {
   const lowPath = subPath.toLowerCase()
   const normalizedPath = MONEDA_MAP[lowPath] || lowPath
-
-  // Priorizar lectura local solo en desarrollo para no romper Edge
-  if (import.meta.env.DEV) {
-    try {
-      const { leerDatosLocales } = await import('./dev-utils.js')
-      const datos = await leerDatosLocales(region, normalizedPath)
-      if (datos) {
-        return datos
-      }
-    }
-    catch {
-      // Ignorar si falla la carga local
-    }
-  }
 
   const url = `${DATA_BASE}/${region}/v1/${normalizedPath}/index.json`
   try {
