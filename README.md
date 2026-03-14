@@ -47,11 +47,33 @@ API oficial de SUA para la consulta de tipos de cambio (BCV, Paralelo, etc.) en 
 
 ## 🔒 Seguridad
 
-- **API Key Dinámica:** Todas las rutas `/v1/*` requieren el header `x-api-key`. Las llaves se validan contra una base de datos en **Turso**, permitiendo gestionar fechas de expiración.
-  - Si `expires_at` tiene una fecha, la llave dejará de funcionar tras ese momento.
-  - Si `expires_at` es `NULL`, la llave es ilimitada.
-- **Rate Limiting:** Máximo 60 peticiones por minuto por IP (vía Upstash Redis).
-- **CORS:** Configurado en Vercel para acceso controlado.
+- **API Key Dinámica:** Todas las rutas `/v1/*` requieren el header `x-api-key`. Las llaves se validan contra una base de datos en **Turso**, permitiendo gestionar fechas de expiración y revocación.
+- **Gestión de Claves:** Puedes generar nuevas claves usando el script CLI incluido:
+  ```bash
+  bun run scripts/generar-api-key.js --name "Cliente X" --days 30
+  ```
+- **Filtro de Fin de Semana:** La API mantiene la tasa del viernes durante el sábado y domingo para evitar discrepancias en cierre bancario.
+
+### ⚠️ Códigos de Error de Autenticación
+
+Todas las respuestas de error de autenticación siguen el formato:
+```json
+{
+  "status": "error",
+  "error": {
+    "code": "EL_CODIGO",
+    "mensaje": "Descripción...",
+    "doc_url": "https://api-sua-bcv.vercel.app/docs/auth#EL_CODIGO"
+  }
+}
+```
+
+| Código | Status | Descripción |
+|---|---|---|
+| `api_key_missing` | 401 | No se proporcionó la clave en los headers. |
+| `api_key_invalid` | 401 | La clave no existe o es incorrecta. |
+| `api_key_expired` | 403 | La clave ha superado su fecha de vencimiento. |
+| `api_key_revoked` | 403 | La clave ha sido desactivada por el administrador. |
 
 ---
 
