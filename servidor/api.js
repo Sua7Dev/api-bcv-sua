@@ -1,8 +1,8 @@
 import { Hono } from 'hono'
 import { timing } from 'hono/timing'
+import { authMiddleware } from '../src/auth.js'
 import { limiteMiddleware } from './intermediarios/limite.middleware.js'
 import { registroMiddleware } from './intermediarios/registro.middleware.js'
-import { seguridadMiddleware } from './intermediarios/seguridad.middleware.js'
 
 export const app = new Hono()
 
@@ -12,8 +12,8 @@ app.use('*', registroMiddleware)
 // Rate Limiting (60 req/min via Upstash)
 app.use('/v1/*', limiteMiddleware)
 
-// API Key Protection
-app.use('/v1/*', seguridadMiddleware)
+// API Key Protection (Turso)
+app.use('/v1/*', authMiddleware)
 
 app.get('/', c => c.text('API SUA-BCV is running 🚀'))
 app.get('/ping', c => c.json({ status: 'ok', timestamp: new Date().toISOString() }))

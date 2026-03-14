@@ -35,6 +35,7 @@
     "og:png": "bun run og/gen-png.js"
   },
   "dependencies": {
+    "@libsql/client": "^0.17.0",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.36.4",
     "better-sqlite3": "^12.5.0",

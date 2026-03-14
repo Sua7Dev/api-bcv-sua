@@ -47,7 +47,9 @@ API oficial de SUA para la consulta de tipos de cambio (BCV, Paralelo, etc.) en 
 
 ## 🔒 Seguridad
 
-- **API Key:** Todas las rutas `/v1/*` requieren el header `x-api-key`.
+- **API Key Dinámica:** Todas las rutas `/v1/*` requieren el header `x-api-key`. Las llaves se validan contra una base de datos en **Turso**, permitiendo gestionar fechas de expiración.
+  - Si `expires_at` tiene una fecha, la llave dejará de funcionar tras ese momento.
+  - Si `expires_at` es `NULL`, la llave es ilimitada.
 - **Rate Limiting:** Máximo 60 peticiones por minuto por IP (vía Upstash Redis).
 - **CORS:** Configurado en Vercel para acceso controlado.
 
