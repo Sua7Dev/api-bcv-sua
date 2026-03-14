@@ -50,6 +50,30 @@ async function obtenerDatos(region, subPath) {
   }
 }
 
+// Helper para transformar datos según requerimientos
+function transformarDatos(datos, slug) {
+  if (!Array.isArray(datos)) return datos
+
+  return datos.map((item) => {
+    const nuevoItem = { ...item }
+
+    // Renombrar "Oficial" a "Dolar" si es la moneda USD
+    if (slug === 'usd' && (nuevoItem.nombre === 'Oficial' || nuevoItem.nombre === 'Dólar' || nuevoItem.nombre === 'Dolar')) {
+      nuevoItem.nombre = 'Dolar'
+    }
+
+    // Asegurar campo moneda
+    if (slug === 'usd' && !nuevoItem.moneda) {
+      nuevoItem.moneda = 'USD'
+    }
+    if (slug === 'eur' && !nuevoItem.moneda) {
+      nuevoItem.moneda = 'EUR'
+    }
+
+    return nuevoItem
+  })
+}
+
 app.get('/v1/cotizaciones', async (c) => {
   const [usd, eur] = await Promise.all([
     obtenerDatos('ve', 'usd'),
@@ -57,8 +81,8 @@ app.get('/v1/cotizaciones', async (c) => {
   ])
 
   const cotizaciones = [
-    ...(Array.isArray(usd) ? usd : []),
-    ...(Array.isArray(eur) ? eur : []),
+    ...(Array.isArray(usd) ? transformarDatos(usd, 'usd') : []),
+    ...(Array.isArray(eur) ? transformarDatos(eur, 'eur') : []),
   ]
 
   return c.json(cotizaciones)
@@ -74,6 +98,11 @@ app.get('/v1/:moneda', async (c) => {
 
   const datos = await obtenerDatos('ve', moneda)
   if (datos) {
+    // Aplicar transformación si es usd o eur
+    const slug = moneda.toLowerCase()
+    if (slug === 'usd' || slug === 'eur') {
+      return c.json(transformarDatos(datos, slug))
+    }
     return c.json(datos)
   }
   return c.json({ error: 'Moneda no encontrada' }, 404)

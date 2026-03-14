@@ -157,9 +157,10 @@ const datos = await respuesta.json()
 [
   {
     "fuente": "oficial",
-    "nombre": "Oficial",
+    "nombre": "Dolar",
     "valor": 445.20,
     "fechaActualizacion": "...",
+    "moneda": "USD",
     "valorAnterior": 443.10,
     "fechaAnterior": "..."
   }
