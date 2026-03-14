@@ -33,15 +33,7 @@ API oficial de SUA para la consulta de tipos de cambio (BCV, Paralelo, etc.) en 
 |---|---|---|
 | `GET` | `/v1/usd` | Cotización del Dólar (BCV Oficial + Paralelo/Yadio) |
 | `GET` | `/v1/eur` | Cotización del Euro (BCV Oficial + Paralelo) |
-| `GET` | `/v1/cotizaciones` | Todas las cotizaciones disponibles en un solo objeto |
-| `GET` | `/v1/estado` | Estado del servicio y última actualización |
-
-### Venezuela — Históricos
-
-| Método | Ruta | Descripción |
-|---|---|---|
-| `GET` | `/v1/historicos/dolares` | Histórico completo de cotizaciones del Dólar |
-| `GET` | `/v1/historicos/euros` | Histórico completo de cotizaciones del Euro |
+| `GET` | `/v1/cotizaciones` | Todas las cotizaciones disponibles (USD + EUR) en un solo objeto |
 
 ---
 

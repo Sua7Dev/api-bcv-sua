@@ -50,8 +50,28 @@ async function obtenerDatos(region, subPath) {
   }
 }
 
+app.get('/v1/cotizaciones', async (c) => {
+  const [usd, eur] = await Promise.all([
+    obtenerDatos('ve', 'usd'),
+    obtenerDatos('ve', 'eur'),
+  ])
+
+  const cotizaciones = [
+    ...(Array.isArray(usd) ? usd : []),
+    ...(Array.isArray(eur) ? eur : []),
+  ]
+
+  return c.json(cotizaciones)
+})
+
 app.get('/v1/:moneda', async (c) => {
   const moneda = c.req.param('moneda')
+
+  // Bloquear endpoint de estado
+  if (moneda === 'estado') {
+    return c.json({ error: 'Endpoint eliminado. Use /ping para diagnóstico.' }, 410)
+  }
+
   const datos = await obtenerDatos('ve', moneda)
   if (datos) {
     return c.json(datos)
@@ -62,6 +82,12 @@ app.get('/v1/:moneda', async (c) => {
 app.get('/v1/:moneda/:subpath', async (c) => {
   const moneda = c.req.param('moneda')
   const subpath = c.req.param('subpath')
+
+  // Bloquear históricos
+  if (moneda === 'historicos') {
+    return c.json({ error: 'Endpoint de históricos desactivado.' }, 410)
+  }
+
   const datos = await obtenerDatos('ve', `${moneda}/${subpath}`)
   if (datos) {
     return c.json(datos)
