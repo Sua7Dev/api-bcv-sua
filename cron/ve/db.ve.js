@@ -1,32 +1,7 @@
-import {
-  abrirBD,
-  asegurarDirectorio,
-  asegurarTabla,
-  cerrarBD,
-  prepararUpsert,
-} from '../utils/sqlite.js'
+import { db } from '../../src/db.js'
 
-export async function guardarCotizacionesVe(cotizaciones, rutaDb) {
-  const directorio = './datos/ve'
-
-  asegurarDirectorio(directorio)
-  const db = abrirBD(rutaDb || `${directorio}/ve.sqlite`)
-
-  // Limpieza de esquema anterior
-  const colInfo = db.prepare('PRAGMA table_info(cotizaciones)').all()
-  if (colInfo.length > 0 && colInfo.some(c => c.name === 'promedio')) {
-    db.exec('DROP TABLE cotizaciones')
-  }
-
-  asegurarTabla(
-    db,
-    'CREATE TABLE IF NOT EXISTS cotizaciones (moneda TEXT, fuente TEXT, nombre TEXT, valor REAL, fechaActualizacion TEXT, PRIMARY KEY (moneda, fuente, fechaActualizacion))',
-  )
-
-  const stmt = prepararUpsert(
-    db,
-    'INSERT OR IGNORE INTO cotizaciones (moneda, fuente, nombre, valor, fechaActualizacion) VALUES (@moneda, @fuente, @nombre, @valor, @fechaActualizacion)',
-  )
+export async function guardarCotizacionesVe(cotizaciones) {
+  if (!cotizaciones || cotizaciones.length === 0) return true
 
   const mappedCotizaciones = cotizaciones.map(c => ({
     moneda: c.moneda || 'USD',
@@ -36,14 +11,16 @@ export async function guardarCotizacionesVe(cotizaciones, rutaDb) {
     fechaActualizacion: c.fechaActualizacion,
   }))
 
-  const tx = db.transaction((items) => {
-    for (const item of items) {
-      stmt.run(item)
-    }
-  })
+  const statements = mappedCotizaciones.map(item => ({
+    sql: 'INSERT OR IGNORE INTO cotizaciones (moneda, fuente, nombre, valor, fechaActualizacion) VALUES (?, ?, ?, ?, ?)',
+    args: [item.moneda, item.fuente, item.nombre, item.valor, item.fechaActualizacion],
+  }))
 
-  tx(mappedCotizaciones)
-  
-  cerrarBD(db)
-  return true
+  try {
+    await db.batch(statements, 'write')
+    return true
+  } catch (error) {
+    console.error('Error al guardar cotizaciones en Turso:', error)
+    throw error
+  }
 }
