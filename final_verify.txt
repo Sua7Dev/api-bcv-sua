@@ -1,0 +1,20 @@
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ­ƒôí add observability to secrets: https://dotenvx.com/ops
+­ƒÜÇ Probando API en: https://api-bcv-sua.vercel.app/v1/cotizaciones
+­ƒôè Status: 200 OK
+Ô£à Datos recibidos correctamente:
+[
+  {
+    "fuente": "oficial",
+    "nombre": "Dolar",
+    "valor": 455.25,
+    "fechaActualizacion": "2026-03-20T10:00:00.000Z",
+    "moneda": "USD"
+  },
+  {
+    "fuente": "oficial",
+    "nombre": "Euro",
+    "valor": 524.5,
+    "fechaActualizacion": "2026-03-20T10:00:00.000Z",
+    "moneda": "EUR"
+  }
+]
