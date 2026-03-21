@@ -1,0 +1,36 @@
+$ bun run ./cron/index.js
+[17:56:23.621] [32mINFO[39m: [36mIniciando cron (ve)[39m
+    [35mtraceId[39m: "n8ona11is5fo6vunksesu"
+    [35mcron[39m: "app.js"
+[17:56:23.622] [32mINFO[39m: [36mInicio[39m
+    [35mtraceId[39m: "n8ona11is5fo6vunksesu"
+    [35mcron[39m: "cron.ve.js"
+[17:56:23.678] [31mERROR[39m: [36mError[39m
+    [35mtraceId[39m: "n8ona11is5fo6vunksesu"
+    [35mcron[39m: "cron.ve.js"
+    [35mextractor[39m: "yadio.extractor.js"
+    [35merrorMessage[39m: "ECONNREFUSED"
+    [35merrorStack[39m: "Error\n    at <anonymous> (D:\samue\Escritorio\trae pruebas\api bcv\node_modules\axios\lib\core\AxiosError.js:96:14)\n    at handleRequestError (D:\samue\Escritorio\trae pruebas\api bcv\node_modules\axios\lib\adapters\http.js:817:25)\n    at emitError (node:events:43:23)\n    at <anonymous> (D:\samue\Escritorio\trae pruebas\api bcv\node_modules\follow-redirects\index.js:38:24)\n    at emitError (node:events:43:23)\n    at <anonymous> (node:_http_client:253:22)\n    at processTicksAndRejections (native:7:39)\n    at request (D:\samue\Escritorio\trae pruebas\api bcv\node_modules\axios\lib\core\Axios.js:45:41)\n    at processTicksAndRejections (native:7:39)"
+[17:56:25.343] [31mERROR[39m: [36mError[39m
+    [35mtraceId[39m: "n8ona11is5fo6vunksesu"
+    [35mcron[39m: "cron.ve.js"
+    [35mextractor[39m: "yadio.extractor.js"
+    [35merrorMessage[39m: "ECONNREFUSED"
+    [35merrorStack[39m: "Error\n    at <anonymous> (D:\samue\Escritorio\trae pruebas\api bcv\node_modules\axios\lib\core\AxiosError.js:96:14)\n    at handleRequestError (D:\samue\Escritorio\trae pruebas\api bcv\node_modules\axios\lib\adapters\http.js:817:25)\n    at emitError (node:events:43:23)\n    at <anonymous> (D:\samue\Escritorio\trae pruebas\api bcv\node_modules\follow-redirects\index.js:38:24)\n    at emitError (node:events:43:23)\n    at <anonymous> (node:_http_client:253:22)\n    at processTicksAndRejections (native:7:39)\n    at request (D:\samue\Escritorio\trae pruebas\api bcv\node_modules\axios\lib\core\Axios.js:45:41)\n    at processTicksAndRejections (native:7:39)"
+[17:56:25.361] [31mERROR[39m: [36mError[39m
+    [35mtraceId[39m: "n8ona11is5fo6vunksesu"
+    [35mcron[39m: "cron.ve.js"
+    [35merrorMessage[39m: "'better-sqlite3' is not yet supported in Bun.\nTrack the status in https://github.com/oven-sh/bun/issues/4290\nIn the meantime, you could try bun:sqlite which has a similar API."
+    [35merrorStack[39m: "Error: 'better-sqlite3' is not yet supported in Bun.\nTrack the status in https://github.com/oven-sh/bun/issues/4290\nIn the meantime, you could try bun:sqlite which has a similar API.\n    at dlopen (unknown)\n    at bindings (D:\samue\Escritorio\trae pruebas\api bcv\node_modules\bindings\bindings.js:112:48)\n    at new Database (D:\samue\Escritorio\trae pruebas\api bcv\node_modules\better-sqlite3\lib\database.js:48:29)\n    at abrirBD (D:\samue\Escritorio\trae pruebas\api bcv\cron\utils\sqlite.js:12:14)\n    at guardarCotizacionesVe (D:\samue\Escritorio\trae pruebas\api bcv\cron\ve\db.ve.js:13:14)\n    at <anonymous> (D:\samue\Escritorio\trae pruebas\api bcv\node_modules\try-to-catch\lib\try-to-catch.js:7:29)\n    at guardarDolares (D:\samue\Escritorio\trae pruebas\api bcv\cron\ve\cron.ve.js:73:29)\n    at async <anonymous> (D:\samue\Escritorio\trae pruebas\api bcv\node_modules\try-to-catch\lib\try-to-catch.js:7:29)\n    at async cron_ve_default (D:\samue\Escritorio\trae pruebas\api bcv\cron\ve\cron.ve.js:36:25)\n    at async iniciar (D:\samue\Escritorio\trae pruebas\api bcv\cron\app.js:24:11)\n    at processTicksAndRejections (native:7:39)"
+    [35maccion[39m: "guardarCotizacionesVe"
+[17:56:25.363] [31mERROR[39m: [36mError[39m
+    [35mtraceId[39m: "n8ona11is5fo6vunksesu"
+    [35mcron[39m: "cron.ve.js"
+    [35merrorMessage[39m: "'better-sqlite3' is not yet supported in Bun.\nTrack the status in https://github.com/oven-sh/bun/issues/4290\nIn the meantime, you could try bun:sqlite which has a similar API."
+    [35merrorStack[39m: "Error: 'better-sqlite3' is not yet supported in Bun.\nTrack the status in https://github.com/oven-sh/bun/issues/4290\nIn the meantime, you could try bun:sqlite which has a similar API.\n    at dlopen (unknown)\n    at bindings (D:\samue\Escritorio\trae pruebas\api bcv\node_modules\bindings\bindings.js:112:48)\n    at new Database (D:\samue\Escritorio\trae pruebas\api bcv\node_modules\better-sqlite3\lib\database.js:48:29)\n    at abrirBD (D:\samue\Escritorio\trae pruebas\api bcv\cron\utils\sqlite.js:12:14)\n    at guardarDolares (D:\samue\Escritorio\trae pruebas\api bcv\cron\ve\cron.ve.js:79:14)\n    at async <anonymous> (D:\samue\Escritorio\trae pruebas\api bcv\node_modules\try-to-catch\lib\try-to-catch.js:7:29)\n    at async cron_ve_default (D:\samue\Escritorio\trae pruebas\api bcv\cron\ve\cron.ve.js:36:25)\n    at async iniciar (D:\samue\Escritorio\trae pruebas\api bcv\cron\app.js:24:11)\n    at processTicksAndRejections (native:7:39)"
+[17:56:25.363] [32mINFO[39m: [36mFin[39m
+    [35mtraceId[39m: "n8ona11is5fo6vunksesu"
+    [35mcron[39m: "cron.ve.js"
+[17:56:25.363] [32mINFO[39m: [36mCron finalizado[39m
+    [35mtraceId[39m: "n8ona11is5fo6vunksesu"
+    [35mcron[39m: "app.js"
