@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "fuente": "oficial",
+    "nombre": "Euro",
+    "valor": 536.09422269,
+    "fechaActualizacion": "2026-03-25T20:18:11.630Z",
+    "valorAnterior": 536.09422269,
+    "fechaAnterior": "2026-03-25T20:16:58.916Z",
+    "moneda": "EUR"
+  }
+]

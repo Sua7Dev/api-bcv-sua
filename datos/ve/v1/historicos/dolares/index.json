@@ -1,7 +1,17 @@
 [
   {
     "fuente": "oficial",
+    "valor": 455.25,
+    "fecha": "2026-03-20"
+  },
+  {
+    "fuente": "oficial",
     "valor": 457.0757,
     "fecha": "2026-03-21"
+  },
+  {
+    "fuente": "oficial",
+    "valor": 462.6687,
+    "fecha": "2026-03-25"
   }
 ]
