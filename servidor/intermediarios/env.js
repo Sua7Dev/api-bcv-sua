@@ -1,4 +1,1 @@
-export const env = {
-  ...(globalThis.process?.env || {}),
-  ...(globalThis.Bun?.env || {}),
-}
+export const env = globalThis.process?.env || globalThis.Bun?.env || {}
