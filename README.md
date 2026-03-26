@@ -142,7 +142,7 @@ bun run tests/test.local.js
 El workflow `.github/workflows/cron.yml` se ejecuta automáticamente **cada 30 minutos** para actualizar los precios desde BCV y Yadio. También puede ejecutarse manualmente desde la pestaña **Actions** de GitHub.
 
 Requiere los siguientes **Secrets** en el repositorio:
-`VITE_API_KEY`, `VITE_GITHUB_TOKEN`, `VITE_AXIOM_TOKEN`, `VITE_AXIOM_ORG_ID`, `VITE_AXIOM_DATASET`
+`VITE_API_KEY`, `VITE_GITHUB_TOKEN`, `VITE_AXIOM_TOKEN`, `VITE_AXIOM_ORG_ID`, `VITE_AXIOM_DATASET`, `VITE_DATABASE_URL`, `VITE_DATABASE_AUTH_TOKEN`
 
 ---
 

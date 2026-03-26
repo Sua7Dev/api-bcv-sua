@@ -54,6 +54,8 @@ jobs:
         run: bun run cron:run
         env:
           CRON_REGION: ${{ inputs.region || 've' }}
+          VITE_DATABASE_URL: ${{ secrets.VITE_DATABASE_URL }}
+          VITE_DATABASE_AUTH_TOKEN: ${{ secrets.VITE_DATABASE_AUTH_TOKEN }}
 
       - name: Commit and push if changes
         run: |
