@@ -37,21 +37,8 @@ jobs:
       - name: Debug Environment
         run: |
           echo "Checking environment variables (presence only, no values):"
-          echo "VITE_DATABASE_URL (Secret): ${{ secrets.VITE_DATABASE_URL != '' && 'Present' || 'Missing' }}"
-          echo "VITE_DATABASE_URL (Var): ${{ vars.VITE_DATABASE_URL != '' && 'Present' || 'Missing' }}"
-          echo "DATABASE_URL (Secret): ${{ secrets.DATABASE_URL != '' && 'Present' || 'Missing' }}"
-          echo "DATABASE_URL (Var): ${{ vars.DATABASE_URL != '' && 'Present' || 'Missing' }}"
-          echo "VITE_DATABASE_AUTH_TOKEN (Secret): ${{ secrets.VITE_DATABASE_AUTH_TOKEN != '' && 'Present' || 'Missing' }}"
-          echo "VITE_DATABASE_AUTH_TOKEN (Var): ${{ vars.VITE_DATABASE_AUTH_TOKEN != '' && 'Present' || 'Missing' }}"
-          echo "DATABASE_AUTH_TOKEN (Secret): ${{ secrets.DATABASE_AUTH_TOKEN != '' && 'Present' || 'Missing' }}"
-          echo "DATABASE_AUTH_TOKEN (Var): ${{ vars.DATABASE_AUTH_TOKEN != '' && 'Present' || 'Missing' }}"
-
-      - name: Inspect Environment Keys
-        run: |
-          echo "Names of variables starting with VITE_ present in the environment:"
-          env | grep VITE_ | cut -d= -f1 || echo "No VITE_ variables found"
-          echo "Names of variables containing DATABASE present in the environment:"
-          env | grep DATABASE | cut -d= -f1 || echo "No DATABASE variables found"
+          echo "VITE_DATABASE_URL: ${{ (secrets.VITE_DATABASE_URL != '' || vars.VITE_DATABASE_URL != '' || secrets.DATABASE_URL != '' || vars.DATABASE_URL != '') && 'Present' || 'Missing' }}"
+          echo "VITE_DATABASE_AUTH_TOKEN: ${{ (secrets.VITE_DATABASE_AUTH_TOKEN != '' || vars.VITE_DATABASE_AUTH_TOKEN != '' || secrets.DATABASE_AUTH_TOKEN != '' || vars.DATABASE_AUTH_TOKEN != '') && 'Present' || 'Missing' }}"
 
       - name: Create .env file
         env:
