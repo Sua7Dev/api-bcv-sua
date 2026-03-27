@@ -2,17 +2,10 @@
   {
     "fuente": "oficial",
     "nombre": "Euro",
-    "valor": 541.19046924,
-    "fechaActualizacion": "2026-03-27T00:46:59.957Z",
+    "valor": 536.09422269,
+    "fechaActualizacion": "2026-03-25T20:18:11.630Z",
     "valorAnterior": 536.09422269,
-    "fechaAnterior": "2026-03-25T20:18:11.630Z",
-    "moneda": "EUR"
-  },
-  {
-    "fuente": "paralelo",
-    "nombre": "Paralelo",
-    "valor": 765.100826,
-    "fechaActualizacion": "2026-03-27T00:47:00.041Z",
+    "fechaAnterior": "2026-03-25T20:16:58.916Z",
     "moneda": "EUR"
   }
 ]
