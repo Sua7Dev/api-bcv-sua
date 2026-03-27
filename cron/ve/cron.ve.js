@@ -7,17 +7,28 @@ import { guardarCotizacionesVe } from './db.ve.js'
 import extraerDolarYadio, { extraerEurYadio } from './yadio.extractor.js'
 
 async function getUltimosValores(moneda, fuente) {
-  const today = new Date()
-  const dayOfWeek = today.getDay()
-  let maxDate = today.toISOString()
+  // Obtener fecha actual en Venezuela
+  const formatter = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/Caracas',
+    year: 'numeric', month: '2-digit', day: '2-digit',
+  })
+  const veDateString = formatter.format(new Date()) // YYYY-MM-DD
+  
+  // Calcular día de la semana en Venezuela
+  const [year, month, day] = veDateString.split('-').map(Number)
+  const veDate = new Date(year, month - 1, day)
+  const dayOfWeek = veDate.getDay()
 
-  // Si es sábado (6) o domingo (0), ignoramos tasas publicadas después del viernes
-  if (dayOfWeek === 0 || dayOfWeek === 6) {
-    const friday = new Date(today)
-    friday.setDate(today.getDate() - (dayOfWeek === 0 ? 2 : 1))
-    friday.setHours(23, 59, 59, 999)
-    maxDate = friday.toISOString()
+  let targetDate = veDateString
+
+  // Si es sábado (6) o domingo (0), retrocedemos al viernes
+  if (dayOfWeek === 6 || dayOfWeek === 0) {
+    const diff = dayOfWeek === 0 ? 2 : 1
+    veDate.setDate(veDate.getDate() - diff)
+    targetDate = veDate.toISOString().slice(0, 10)
   }
+
+  const maxDate = `${targetDate}T23:59:59.999Z`
 
   const result = await db.execute({
     sql: `
