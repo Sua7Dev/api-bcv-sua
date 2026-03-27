@@ -5,9 +5,9 @@ const transports = pino.transport({
     {
       target: 'pino-axiom',
       options: {
-        orgId: process.env.VITE_AXIOM_ORG_ID,
-        token: process.env.VITE_AXIOM_TOKEN,
-        dataset: process.env.VITE_AXIOM_DATASET,
+        orgId: (process.env.VITE_AXIOM_ORG_ID || '').trim().replace(/^["']|["']$/g, ''),
+        token: (process.env.VITE_AXIOM_TOKEN || '').trim().replace(/^["']|["']$/g, ''),
+        dataset: (process.env.VITE_AXIOM_DATASET || '').trim().replace(/^["']|["']$/g, ''),
       },
     },
     {

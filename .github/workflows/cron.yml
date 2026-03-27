@@ -39,6 +39,8 @@ jobs:
           echo "Checking environment variables (presence only, no values):"
           echo "VITE_DATABASE_URL: ${{ (secrets.VITE_DATABASE_URL != '' || vars.VITE_DATABASE_URL != '' || secrets.DATABASE_URL != '' || vars.DATABASE_URL != '') && 'Present' || 'Missing' }}"
           echo "VITE_DATABASE_AUTH_TOKEN: ${{ (secrets.VITE_DATABASE_AUTH_TOKEN != '' || vars.VITE_DATABASE_AUTH_TOKEN != '' || secrets.DATABASE_AUTH_TOKEN != '' || vars.DATABASE_AUTH_TOKEN != '') && 'Present' || 'Missing' }}"
+          echo "VITE_AXIOM_ORG_ID: ${{ secrets.VITE_AXIOM_ORG_ID != '' && 'Present' || 'Missing' }}"
+          echo "VITE_AXIOM_TOKEN: ${{ secrets.VITE_AXIOM_TOKEN != '' && 'Present' || 'Missing' }}"
 
       - name: Create .env file
         env:
