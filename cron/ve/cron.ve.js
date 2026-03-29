@@ -30,18 +30,35 @@ async function getUltimosValores(moneda, fuente) {
 
   const maxDate = `${targetDate}T23:59:59.999Z`
 
-  const result = await db.execute({
+  // 1. Obtener el actual (último disponible hasta maxDate)
+  const actualResult = await db.execute({
     sql: `
       SELECT valor, fechaActualizacion
       FROM cotizaciones
       WHERE moneda = ? AND fuente = ? AND fechaActualizacion <= ?
       ORDER BY fechaActualizacion DESC
-      LIMIT 2
+      LIMIT 1
     `,
     args: [moneda, fuente, maxDate],
   })
 
-  return result.rows
+  if (actualResult.rows.length === 0) return []
+
+  const actual = actualResult.rows[0]
+
+  // 2. Obtener el anterior (último de un día distinto al actual)
+  const anteriorResult = await db.execute({
+    sql: `
+      SELECT valor, fechaActualizacion
+      FROM cotizaciones
+      WHERE moneda = ? AND fuente = ? AND date(fechaActualizacion) < date(?)
+      ORDER BY fechaActualizacion DESC
+      LIMIT 1
+    `,
+    args: [moneda, fuente, actual.fechaActualizacion],
+  })
+
+  return [actual, ...anteriorResult.rows]
 }
 
 export default async function () {

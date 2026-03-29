@@ -170,8 +170,9 @@ const datos = await respuesta.json()
 
 ---
 
-## 📅 Lógica de Fin de Semana
+## 📅 Lógica de Fin de Semana y Tasas Futuras
 
-Para garantizar la estabilidad en la facturación y consultas durante el cierre bancario:
-- **Sábados y Domingos:** La API ignora tasas publicadas para el lunes siguiente y continúa mostrando la tasa del **viernes** como el valor actual.
-- **Días Laborales:** Muestra siempre el último valor publicado.
+Para garantizar la estabilidad en la facturación y coherencia con el mercado bancario:
+- **Extracción de Fecha Valor:** El scraper extrae la fecha efectiva ("Fecha Valor") directamente del sitio web del BCV. Si el viernes por la tarde el BCV publica la tasa para el lunes, esta se guarda con fecha de lunes.
+- **Filtro de Fin de Semana:** Durante sábados y domingos, la API ignora automáticamente cualquier tasa futura (del lunes) y continúa sirviendo la tasa que fue válida para el **viernes**.
+- **Valor Anterior Histórico:** El campo `valorAnterior` ahora busca siempre el último registro de un **día distinto** al actual. Esto garantiza una comparación útil día a día y evita que el valor anterior sea idéntico al actual en caso de múltiples actualizaciones en una misma jornada.

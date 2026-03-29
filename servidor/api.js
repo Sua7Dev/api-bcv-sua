@@ -78,10 +78,11 @@ async function obtenerDatosDeTurso(monedaRaw) {
 
     // Para cada fuente, obtener el valor anterior (para delta)
     const datosFinales = await Promise.all(fuentes.map(async (actual) => {
+      // Valor anterior: buscamos el último registro de un día distinto
       const historial = await db.execute({
         sql: `
           SELECT valor, fechaActualizacion FROM cotizaciones
-          WHERE moneda = ? AND fuente = ? AND fechaActualizacion < ?
+          WHERE moneda = ? AND fuente = ? AND date(fechaActualizacion) < date(?)
           ORDER BY fechaActualizacion DESC
           LIMIT 1
         `,
