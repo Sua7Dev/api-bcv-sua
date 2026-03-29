@@ -31,9 +31,15 @@ API oficial de SUA para la consulta de tipos de cambio (BCV, Paralelo, etc.) en 
 
 | Método | Ruta | Descripción |
 |---|---|---|
-| `GET` | `/v1/usd` | Cotización del Dólar (BCV Oficial + Paralelo/Yadio) |
-| `GET` | `/v1/eur` | Cotización del Euro (BCV Oficial + Paralelo) |
-| `GET` | `/v1/cotizaciones` | Todas las cotizaciones disponibles (USD + EUR) en un solo objeto |
+| `GET` | `/v1/usd` | **Oficial**: Tasa BCV para el Dólar |
+| `GET` | `/v1/usd-par` | **Paralelo**: Tasa paralela/promedio para el Dólar |
+| `GET` | `/v1/usd-all` | **Todo**: Todas las fuentes disponibles para el Dólar |
+| `GET` | `/v1/eur` | **Oficial**: Tasa BCV para el Euro |
+| `GET` | `/v1/eur-par` | **Paralelo**: Tasa paralela para el Euro |
+| `GET` | `/v1/eur-all` | **Todo**: Todas las fuentes disponibles para el Euro |
+| `GET` | `/v1/cotizaciones` | **Oficial**: Solo tasas oficiales (BCV) de USD y EUR |
+| `GET` | `/v1/cotizaciones-par` | **Paralelo**: Solo tasas paralelas de USD y EUR |
+| `GET` | `/v1/cotizaciones-all` | **Todo**: Todas las fuentes de USD y EUR juntas |
 
 ---
 

@@ -147,6 +147,34 @@ app.get('/v1/cotizaciones', async (c) => {
   ])
 
   const cotizaciones = [
+    ...(Array.isArray(usd) ? transformarDatos(usd, 'usd').filter(d => d.fuente === 'oficial') : []),
+    ...(Array.isArray(eur) ? transformarDatos(eur, 'eur').filter(d => d.fuente === 'oficial') : []),
+  ]
+
+  return c.json(cotizaciones)
+})
+
+app.get('/v1/cotizaciones-par', async (c) => {
+  const [usd, eur] = await Promise.all([
+    obtenerDatosDeTurso('usd'),
+    obtenerDatosDeTurso('eur'),
+  ])
+
+  const cotizaciones = [
+    ...(Array.isArray(usd) ? transformarDatos(usd, 'usd').filter(d => d.fuente === 'paralelo') : []),
+    ...(Array.isArray(eur) ? transformarDatos(eur, 'eur').filter(d => d.fuente === 'paralelo') : []),
+  ]
+
+  return c.json(cotizaciones)
+})
+
+app.get('/v1/cotizaciones-all', async (c) => {
+  const [usd, eur] = await Promise.all([
+    obtenerDatosDeTurso('usd'),
+    obtenerDatosDeTurso('eur'),
+  ])
+
+  const cotizaciones = [
     ...(Array.isArray(usd) ? transformarDatos(usd, 'usd') : []),
     ...(Array.isArray(eur) ? transformarDatos(eur, 'eur') : []),
   ]
@@ -155,21 +183,37 @@ app.get('/v1/cotizaciones', async (c) => {
 })
 
 app.get('/v1/:moneda', async (c) => {
-  const moneda = c.req.param('moneda')
-
+  const monedaRaw = c.req.param('moneda')
+  
   // Bloquear endpoint de estado
-  if (moneda === 'estado') {
+  if (monedaRaw === 'estado') {
     return c.json({ error: 'Endpoint eliminado. Use /ping para diagnóstico.' }, 410)
   }
 
+  // Manejar sufijos -all y -par
+  const isAll = monedaRaw.endsWith('-all')
+  const isPar = monedaRaw.endsWith('-par')
+  
+  const moneda = monedaRaw.replace('-all', '').replace('-par', '')
+  const slug = moneda.toLowerCase()
+
   const datos = await obtenerDatosDeTurso(moneda)
+  
   if (datos) {
-    const slug = moneda.toLowerCase()
-    if (slug === 'usd' || slug === 'eur') {
-      return c.json(transformarDatos(datos, slug))
+    let filtrados = datos
+    if (isPar) {
+      filtrados = datos.filter(d => d.fuente === 'paralelo')
+    } else if (!isAll) {
+      // Por defecto (sin sufijo o sin -all), solo oficial
+      filtrados = datos.filter(d => d.fuente === 'oficial')
     }
-    return c.json(datos)
+
+    if (slug === 'usd' || slug === 'eur') {
+      return c.json(transformarDatos(filtrados, slug))
+    }
+    return c.json(filtrados)
   }
+  
   return c.json({ error: 'Moneda no encontrada' }, 404)
 })
 

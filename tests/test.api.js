@@ -9,13 +9,13 @@ const API_URL = (process.env.VITE_API_URL
 const API_KEY = process.env.VITE_API_KEY
 
 async function testAPI() {
-  console.warn(`🚀 Probando API en: ${API_URL}/v1/usd`)
+  console.warn(`🚀 Probando API en: ${API_URL}/v1/eur`)
 
   try {
     const controller = new AbortController()
     const id = setTimeout(() => controller.abort(), 30000) // 30s timeout for cold starts
 
-    const respuesta = await fetch(`${API_URL}/v1/usd`, {
+    const respuesta = await fetch(`${API_URL}/v1/eur`, {
       headers: {
         'x-api-key': API_KEY,
       },
