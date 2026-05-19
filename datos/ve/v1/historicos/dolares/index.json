@@ -458,5 +458,10 @@
     "fuente": "oficial",
     "valor": 517.9619,
     "fecha": "2026-05-19"
+  },
+  {
+    "fuente": "paralelo",
+    "valor": 719.5975,
+    "fecha": "2026-05-19"
   }
 ]
