@@ -876,6 +876,12 @@
     "moneda": "EUR"
   },
   {
+    "fuente": "paralelo",
+    "valor": 921.141458,
+    "fecha": "2026-06-20",
+    "moneda": "EUR"
+  },
+  {
     "fuente": "oficial",
     "valor": 702.4241344,
     "fecha": "2026-06-22",
