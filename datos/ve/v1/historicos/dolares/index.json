@@ -746,7 +746,12 @@
   },
   {
     "fuente": "paralelo",
-    "valor": 791.1625,
+    "valor": 790.73375,
     "fecha": "2026-06-22"
+  },
+  {
+    "fuente": "oficial",
+    "valor": 617.6388,
+    "fecha": "2026-06-23"
   }
 ]
