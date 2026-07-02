@@ -580,5 +580,11 @@
     "valor": 835.638891,
     "fecha": "2026-07-01",
     "moneda": "EUR"
+  },
+  {
+    "fuente": "paralelo",
+    "valor": 835.855602,
+    "fecha": "2026-07-02",
+    "moneda": "EUR"
   }
 ]
