@@ -1405,8 +1405,14 @@
   },
   {
     "fuente": "paralelo",
-    "valor": 994.548928,
+    "valor": 997.033001,
     "fecha": "2026-08-12",
+    "moneda": "EUR"
+  },
+  {
+    "fuente": "oficial",
+    "valor": 885.07948384,
+    "fecha": "2026-08-13",
     "moneda": "EUR"
   }
 ]
