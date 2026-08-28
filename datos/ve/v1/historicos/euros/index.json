@@ -1564,5 +1564,17 @@
     "valor": 1079.537839,
     "fecha": "2026-08-27",
     "moneda": "EUR"
+  },
+  {
+    "fuente": "oficial",
+    "valor": 921.88003881,
+    "fecha": "2026-08-28",
+    "moneda": "EUR"
+  },
+  {
+    "fuente": "paralelo",
+    "valor": 1089.37312,
+    "fecha": "2026-08-28",
+    "moneda": "EUR"
   }
 ]
