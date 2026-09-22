@@ -1816,5 +1816,11 @@
     "valor": 978.1738505,
     "fecha": "2026-09-22",
     "moneda": "EUR"
+  },
+  {
+    "fuente": "paralelo",
+    "valor": 1091.644466,
+    "fecha": "2026-09-22",
+    "moneda": "EUR"
   }
 ]
