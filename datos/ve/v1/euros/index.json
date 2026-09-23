@@ -2,19 +2,19 @@
   {
     "fuente": "oficial",
     "nombre": "Euro",
-    "valor": 978.1738505,
-    "fechaActualizacion": "2026-09-22T00:00:00.000Z",
-    "valorAnterior": 974.09309112,
-    "fechaAnterior": "2026-09-21T00:00:00.000Z",
+    "valor": 976.54829408,
+    "fechaActualizacion": "2026-09-23T00:00:00.000Z",
+    "valorAnterior": 978.1738505,
+    "fechaAnterior": "2026-09-22T00:00:00.000Z",
     "moneda": "EUR"
   },
   {
     "fuente": "paralelo",
     "nombre": "Paralelo",
-    "valor": 1099.370384,
-    "fechaActualizacion": "2026-09-22T23:43:44.091Z",
-    "valorAnterior": 1093.498857,
-    "fechaAnterior": "2026-09-21T22:45:23.660Z",
+    "valor": 1088.273817,
+    "fechaActualizacion": "2026-09-23T04:06:14.468Z",
+    "valorAnterior": 1099.370384,
+    "fechaAnterior": "2026-09-22T23:43:44.091Z",
     "moneda": "EUR"
   }
 ]
