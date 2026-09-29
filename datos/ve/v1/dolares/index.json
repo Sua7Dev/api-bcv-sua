@@ -2,17 +2,17 @@
   {
     "fuente": "oficial",
     "nombre": "Oficial",
-    "valor": 857.0058,
-    "fechaActualizacion": "2026-09-28T00:00:00.000Z",
-    "valorAnterior": 855.6625,
-    "fechaAnterior": "2026-09-25T00:00:00.000Z"
+    "valor": 857.8876,
+    "fechaActualizacion": "2026-09-29T00:00:00.000Z",
+    "valorAnterior": 857.0058,
+    "fechaAnterior": "2026-09-28T00:00:00.000Z"
   },
   {
     "fuente": "paralelo",
     "nombre": "Paralelo",
-    "valor": 964.048511,
-    "fechaActualizacion": "2026-09-28T21:42:35.000Z",
-    "valorAnterior": 953.525416,
-    "fechaAnterior": "2026-09-27T22:28:54.339Z"
+    "valor": 955.649785,
+    "fechaActualizacion": "2026-09-29T08:08:43.519Z",
+    "valorAnterior": 964.048511,
+    "fechaAnterior": "2026-09-28T21:42:35.000Z"
   }
 ]
