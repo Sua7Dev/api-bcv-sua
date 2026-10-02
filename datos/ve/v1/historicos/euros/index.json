@@ -1918,5 +1918,17 @@
     "valor": 1075.333054,
     "fecha": "2026-10-01",
     "moneda": "EUR"
+  },
+  {
+    "fuente": "oficial",
+    "valor": 973.92813268,
+    "fecha": "2026-10-02",
+    "moneda": "EUR"
+  },
+  {
+    "fuente": "paralelo",
+    "valor": 1081.228149,
+    "fecha": "2026-10-02",
+    "moneda": "EUR"
   }
 ]
