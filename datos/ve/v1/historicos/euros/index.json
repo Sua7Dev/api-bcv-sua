@@ -1978,5 +1978,17 @@
     "valor": 1126.299741,
     "fecha": "2026-10-07",
     "moneda": "EUR"
+  },
+  {
+    "fuente": "oficial",
+    "valor": 979.0788922,
+    "fecha": "2026-10-08",
+    "moneda": "EUR"
+  },
+  {
+    "fuente": "paralelo",
+    "valor": 1132.17073,
+    "fecha": "2026-10-08",
+    "moneda": "EUR"
   }
 ]
