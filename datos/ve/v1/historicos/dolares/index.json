@@ -1666,7 +1666,12 @@
   },
   {
     "fuente": "paralelo",
-    "valor": 1007.299803,
+    "valor": 1007.14291,
     "fecha": "2026-10-09"
+  },
+  {
+    "fuente": "oficial",
+    "valor": 876.7976,
+    "fecha": "2026-10-13"
   }
 ]
