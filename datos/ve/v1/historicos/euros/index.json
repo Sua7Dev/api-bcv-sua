@@ -1990,5 +1990,17 @@
     "valor": 1134.346224,
     "fecha": "2026-10-08",
     "moneda": "EUR"
+  },
+  {
+    "fuente": "oficial",
+    "valor": 980.61472543,
+    "fecha": "2026-10-09",
+    "moneda": "EUR"
+  },
+  {
+    "fuente": "paralelo",
+    "valor": 1136.769058,
+    "fecha": "2026-10-09",
+    "moneda": "EUR"
   }
 ]
