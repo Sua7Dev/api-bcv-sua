@@ -844,5 +844,11 @@
     "valor": 985.729808,
     "fecha": "2026-10-16",
     "moneda": "EUR"
+  },
+  {
+    "fuente": "oficial",
+    "valor": 991.16445734,
+    "fecha": "2026-10-19",
+    "moneda": "EUR"
   }
 ]
