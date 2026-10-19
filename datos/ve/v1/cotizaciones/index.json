@@ -2,19 +2,19 @@
   {
     "fuente": "oficial",
     "nombre": "Dólar",
-    "valor": 880.1159,
-    "fechaActualizacion": "2026-10-16T00:00:00.000Z",
-    "valorAnterior": 879.1225,
-    "fechaAnterior": "2026-10-15T00:00:00.000Z",
+    "valor": 881.0664,
+    "fechaActualizacion": "2026-10-19T00:00:00.000Z",
+    "valorAnterior": 880.1159,
+    "fechaAnterior": "2026-10-16T00:00:00.000Z",
     "moneda": "USD"
   },
   {
     "fuente": "oficial",
     "nombre": "Euro",
-    "valor": 985.729808,
-    "fechaActualizacion": "2026-10-16T00:00:00.000Z",
-    "valorAnterior": 977.68092347,
-    "fechaAnterior": "2026-10-15T00:00:00.000Z",
+    "valor": 991.16445734,
+    "fechaActualizacion": "2026-10-19T00:00:00.000Z",
+    "valorAnterior": 985.729808,
+    "fechaAnterior": "2026-10-16T00:00:00.000Z",
     "moneda": "EUR"
   }
 ]
