@@ -2113,8 +2113,14 @@
   },
   {
     "fuente": "paralelo",
-    "valor": 1129.234821,
+    "valor": 1128.173397,
     "fecha": "2026-10-21",
+    "moneda": "EUR"
+  },
+  {
+    "fuente": "oficial",
+    "valor": 993.21105346,
+    "fecha": "2026-10-22",
     "moneda": "EUR"
   }
 ]
