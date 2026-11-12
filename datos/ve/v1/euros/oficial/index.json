@@ -1,9 +1,9 @@
 {
   "fuente": "oficial",
   "nombre": "Euro",
-  "valor": 1.007,
-  "fechaActualizacion": "2026-11-11T00:00:00.000Z",
-  "valorAnterior": 1.006,
-  "fechaAnterior": "2026-11-10T00:00:00.000Z",
+  "valor": 1.003,
+  "fechaActualizacion": "2026-11-12T00:00:00.000Z",
+  "valorAnterior": 1.007,
+  "fechaAnterior": "2026-11-11T00:00:00.000Z",
   "moneda": "EUR"
 }
