@@ -1953,5 +1953,10 @@
     "fuente": "oficial",
     "valor": 911.6243,
     "fecha": "2026-11-13"
+  },
+  {
+    "fuente": "paralelo",
+    "valor": 1074.562449,
+    "fecha": "2026-11-13"
   }
 ]
