@@ -2476,5 +2476,17 @@
     "valor": 1202.259588,
     "fecha": "2026-11-26",
     "moneda": "EUR"
+  },
+  {
+    "fuente": "oficial",
+    "valor": 1.016,
+    "fecha": "2026-11-27",
+    "moneda": "EUR"
+  },
+  {
+    "fuente": "paralelo",
+    "valor": 1191.851842,
+    "fecha": "2026-11-27",
+    "moneda": "EUR"
   }
 ]
